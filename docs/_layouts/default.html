@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <title>{% if page.title %}{{ page.title }} · {% endif %}Computer Science @ UNICAM</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="{{ '/' | relative_url }}" aria-label="Home">
+        <span class="brand-mark">CS</span>
+        <span class="brand-text">Computer Science <span>@ UNICAM</span></span>
+      </a>
+      <div class="topbar-meta">MSc · Camerino</div>
+    </header>
+
+    <main class="content">
+      {{ content }}
+    </main>
+
+    <footer class="footer">
+      <span>Computer Science · Università di Camerino</span>
+      <a href="https://github.com/Berserk-hub150/ComputerScience">GitHub ↗</a>
+    </footer>
+  </div>
+</body>
+</html>
