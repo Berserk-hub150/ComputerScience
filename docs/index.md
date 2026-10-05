@@ -19,25 +19,25 @@ title: Home
   </div>
 
   <div class="course-grid">
-    <a class="course-card" href="{{ '/1anno/1semestre/complex-systems-design.html' | relative_url }}">
+    <a class="course-card" href="{{ '/1anno/1semestre/complex-systems-design/' | relative_url }}">
       <div class="course-number">01</div>
       <h3>Complex Systems Design</h3>
       <div class="course-bottom"><span>Course material</span><span class="course-arrow">↗</span></div>
     </a>
 
-    <a class="course-card" href="{{ '/1anno/1semestre/machine-learning.html' | relative_url }}">
+    <a class="course-card" href="{{ '/1anno/1semestre/machine-learning/' | relative_url }}">
       <div class="course-number">02</div>
       <h3>Machine Learning</h3>
       <div class="course-bottom"><span>Course material</span><span class="course-arrow">↗</span></div>
     </a>
 
-    <a class="course-card" href="{{ '/1anno/1semestre/multiagent-systems-lab.html' | relative_url }}">
+    <a class="course-card" href="{{ '/1anno/1semestre/multiagent-systems-lab/' | relative_url }}">
       <div class="course-number">03</div>
       <h3>Multiagent Systems Lab</h3>
       <div class="course-bottom"><span>Course material</span><span class="course-arrow">↗</span></div>
     </a>
 
-    <a class="course-card" href="{{ '/1anno/1semestre/agent-based-adaptive-modelling.html' | relative_url }}">
+    <a class="course-card" href="{{ '/1anno/1semestre/agent-based-adaptive-modelling/' | relative_url }}">
       <div class="course-number">04</div>
       <h3>Agent-Based Adaptive Modelling</h3>
       <div class="course-bottom"><span>Course material</span><span class="course-arrow">↗</span></div>
