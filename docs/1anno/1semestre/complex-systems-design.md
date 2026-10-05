@@ -10,7 +10,7 @@ title: Complex Systems Design
   <div class="page-meta">Computer Science · Università di Camerino</div>
 </section>
 
-<div class="course-content">
+<div class="course-content" markdown="1">
 ## Materiale didattico
 
 - Da aggiungere.
