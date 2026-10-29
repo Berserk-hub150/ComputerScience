@@ -19,6 +19,12 @@ layout: null
     h1 { margin:9px 0 6px; font-size:clamp(28px,5vw,44px); line-height:1.1; letter-spacing:-2px; }
     .subtitle { margin:0; color:var(--muted); font-size:13px; }
     .stamp { border:2px solid var(--ink); padding:10px 12px; background:#ffe28d; box-shadow:4px 4px 0 var(--ink); font-size:12px; font-weight:bold; }
+    .header-actions { display:flex; flex-direction:column; align-items:flex-end; gap:11px; }
+    .star-button { display:inline-block; padding:14px 18px; border:3px solid var(--ink); background:#ffe16b; box-shadow:5px 5px 0 var(--ink); color:var(--ink); font-size:14px; font-weight:900; text-align:center; text-decoration:none; white-space:nowrap; transition:transform .12s, box-shadow .12s; }
+    .star-button:hover { transform:translate(-2px,-2px); box-shadow:7px 7px 0 var(--ink); background:#ffcd40; }
+    .star-button:focus-visible { outline:3px dashed #d65b1a; outline-offset:7px; }
+    .header-actions .stamp { background:#fffdf7; box-shadow:3px 3px 0 var(--ink); }
+    @media(max-width:650px) { .header-actions { width:100%; align-items:stretch; } .star-button { white-space:normal; } .header-actions .stamp { align-self:flex-start; } }
     .strip { display:flex; justify-content:space-between; gap:15px; border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); margin:28px 0 22px; padding:11px 2px; font-size:12px; font-weight:bold; }
     .strip span:last-child { color:var(--muted); }
     .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; }
@@ -47,7 +53,10 @@ layout: null
         <h1>RETRO NOTES_</h1>
         <p class="subtitle">Appunti e materiali · Artificial Intelligence</p>
       </div>
-      <div class="stamp">ANNO 2026/27</div>
+      <div class="header-actions">
+        <a class="star-button" href="https://github.com/Berserk-hub150/ComputerScience" target="_blank" rel="noopener noreferrer" aria-label="Lascia una star alla repository ComputerScience su GitHub">★ LASCIA UNA STAR SU GITHUB ↗</a>
+        <div class="stamp">ANNO 2026/27</div>
+      </div>
     </header>
     <div class="strip"><span>01 // PRIMO SEMESTRE</span><span>4 MATERIE</span></div>
     <section class="grid" aria-label="Materie del primo semestre">
