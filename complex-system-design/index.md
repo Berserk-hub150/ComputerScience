@@ -5,7 +5,7 @@ num: "02"
 code: "CSD"
 tone: "blue"
 image: "https://art.pixilart.com/bfbca2a0e9c0fe5.png"
-original_url: "https://informatica.palozz.com/computer-science/Complex_System_Design/"
+original_url: "https://app.notion.com/p/COMPLEX-SYSTEMS-DESIGN-3f0e0341618980ba8633f5cca0190438"
 updated: 2026-10-29
 permalink: /complex-system-design/
 ---
