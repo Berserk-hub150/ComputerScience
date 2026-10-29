@@ -32,6 +32,9 @@
     .content code { background:#eee9df; padding:2px 4px; }
     .source { display:inline-block; padding:9px 11px; background:#ffe28d; border:2px solid var(--ink); color:var(--ink); text-decoration:none; font-size:12px; font-weight:bold; box-shadow:3px 3px 0 var(--ink); }
     .source:hover { transform:translate(-1px,-1px); }
+    .course-links { display:flex; gap:12px; flex-wrap:wrap; margin:4px 0 20px; }
+    .course-links .source { margin-bottom:3px; }
+    .source-materials { background:#b9dfb5; }
     .meta { display:flex; gap:8px 20px; flex-wrap:wrap; padding:15px 24px; border-top:2px dashed #c4c0b7; color:var(--muted); font-size:11px; }
     footer { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; padding:25px 0; font-size:11px; color:var(--muted); }
     footer a { color:inherit; }
@@ -51,7 +54,10 @@
         </div>
       </div>
       <div class="content">
-        <a class="source" href="{{ page.original_url }}" target="_blank" rel="noopener noreferrer">APRI APPUNTI NOTION ↗</a>
+        <nav class="course-links" aria-label="Risorse principali del corso">
+          <a class="source" href="{{ page.original_url }}" target="_blank" rel="noopener noreferrer">APPUNTI NOTION ↗</a>
+          {% if page.course_materials_url %}<a class="source source-materials" href="{{ page.course_materials_url }}" target="_blank" rel="noopener noreferrer">MATERIALI DEL CORSO ↗</a>{% endif %}
+        </nav>
         {{ content }}
       </div>
       <div class="meta">
