@@ -23,6 +23,21 @@
 | <img src="https://art.pixilart.com/f80e1a349d6ca51.png" width="56" alt="Gatto pixel art"> | **Agent-Based Adaptive Modelling** | [Apri la pagina](https://berserk-hub150.github.io/ComputerScience/agent-based-adaptive-modelling/) |
 | <img src="https://art.pixilart.com/e93c1fcc8282bf8.gif" width="56" alt="Robot pixel art"> | **Multiagent System Lab** | [Apri la pagina](https://berserk-hub150.github.io/ComputerScience/multiagent-system-lab/) |
 
+## Appunti e materiali del corso
+
+In ogni pagina trovi due pulsanti:
+
+- **Appunti Notion** — apre i tuoi appunti del corso.
+- **Materiali del corso** — apre la rispettiva pagina su informatica.palozz.com, dove cercare Moodle e le altre risorse.
+
+Se vuoi aggiungere il collegamento **diretto** a Moodle, apri il file `index.md` della materia e inseriscilo sotto `## Moodle e materiale didattico`, per esempio:
+
+```markdown
+- [Apri Moodle del corso](https://indirizzo-vero-del-corso)
+```
+
+I link diretti ai singoli corsi Moodle non sono stati verificati, quindi non sono stati inventati.
+
 ## Aggiungere link (facilissimo)
 
 1. Apri il file `index.md` dentro la cartella della materia (per esempio [`machine-learning/index.md`](machine-learning/index.md)).
