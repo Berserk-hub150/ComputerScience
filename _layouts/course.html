@@ -32,7 +32,7 @@
     .content code { background:#eee9df; padding:2px 4px; }
     .source { display:inline-block; padding:9px 11px; background:#ffe28d; border:2px solid var(--ink); color:var(--ink); text-decoration:none; font-size:12px; font-weight:bold; box-shadow:3px 3px 0 var(--ink); }
     .source:hover { transform:translate(-1px,-1px); }
-    .course-links { display:flex; gap:12px; flex-wrap:wrap; margin:4px 0 20px; }
+    .course-links { display:flex; gap:12px; flex-wrap:wrap; margin:4px 0 0; }
     .course-links .source { margin-bottom:3px; }
     .source-materials { background:#b9dfb5; }
     .source-webex { background:#a9d9ee; }
@@ -64,7 +64,7 @@
           {% if page.recordings_url %}<a class="source source-recordings" href="{{ page.recordings_url }}" target="_blank" rel="noopener noreferrer">REGISTRAZIONI ↗</a>{% endif %}
           {% if page.course_materials_url %}<a class="source source-palozz" href="{{ page.course_materials_url }}" target="_blank" rel="noopener noreferrer">SCHEDA PALOZZ ↗</a>{% endif %}
         </nav>
-        {{ content }}
+        {% if content != "" %}{{ content }}{% endif %}
       </div>
       <div class="meta">
         <span>Ultimo aggiornamento: <time id="last-updated" datetime="{{ page.updated }}">{{ page.updated | date: "%d/%m/%Y" }}</time></span>
