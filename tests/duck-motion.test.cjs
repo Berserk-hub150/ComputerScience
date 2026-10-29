@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { bounds, clamp, step, walkFrame, advanceWalk } = require('../assets/js/duck-motion.js');
+const { bounds, clamp, step, walkFrame, advanceWalk, platformLane, platformOrder, jumpPoint } = require('../assets/js/duck-motion.js');
 test('both dock positions fit a desktop and a phone viewport', () => {
   for (const [w, h, aw, ah] of [[1365, 937, 176, 184], [320, 568, 140, 162]]) {
     const box = bounds(w, h, aw, ah);
@@ -64,4 +64,37 @@ test('pause does not move the feet; resuming cannot jump after a long hidden int
   const resumed = advanceWalk(p, 12, 0, 30, 50);
   assert.ok(resumed.moved < 1);
   assert.equal(resumed.y, p.y);
+});
+test('the route visits both rows of cards in a short serpentine order', () => {
+  const cards = [
+    { id: 'ml', top: 220, left: 200 }, { id: 'csd', top: 220, left: 650 },
+    { id: 'aam', top: 470, left: 200 }, { id: 'masl', top: 470, left: 650 }
+  ];
+  assert.deepEqual(platformOrder(cards).map(c => c.id), ['ml', 'csd', 'masl', 'aam']);
+  assert.deepEqual(cards.map(c => c.id), ['ml', 'csd', 'aam', 'masl']);
+});
+test('platform lanes put the feet on the top border, including narrow resource buttons', () => {
+  for (const width of [72, 125, 440]) {
+    const rect = { left: 200, right: 200 + width, top: 300, width };
+    const lane = platformLane(rect, { width: 90, height: 57 }, { left: 0, width: 1363 });
+    assert.equal(lane.y + 57, 301);
+    assert.ok(lane.left + 45 > rect.left && lane.right + 45 < rect.right);
+    assert.ok(lane.right > lane.left);
+  }
+});
+test('wrapped or additional resource buttons are discovered in geometry order without a count limit', () => {
+  const links = Array.from({ length: 7 }, (_, i) => ({ id: i, top: 300 + Math.floor(i / 3) * 58, left: 120 + i % 3 * 110 }));
+  assert.deepEqual(platformOrder(links).map(c => c.id), [0, 1, 2, 5, 4, 3, 6]);
+});
+test('a jump lands exactly on its target and clears a higher platform', () => {
+  const from = { x: 210, y: 440 }, to = { x: 210, y: 200 };
+  assert.deepEqual(jumpPoint(from, to, 0), from);
+  assert.deepEqual(jumpPoint(from, to, 1), to);
+  assert.deepEqual(jumpPoint(from, to, 1.5), to);
+  assert.ok(Math.min(...Array.from({ length: 21 }, (_, i) => jumpPoint(from, to, i / 20).y)) < to.y - 20);
+});
+test('scrolling document coordinates does not change the physical platform attachment', () => {
+  const lane = platformLane({ left: 18, right: 302, top: 900, width: 284 }, { width: 90, height: 57 }, { left: 0, width: 320 });
+  assert.ok(lane.left >= 8 && lane.right + 90 <= 312);
+  assert.equal(lane.y - 700 + 57, 201);
 });

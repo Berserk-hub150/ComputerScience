@@ -79,3 +79,13 @@
   .duck-guide[data-side="left"] .duck-panel { left:12px; right:auto; }
 }
 @media(prefers-reduced-motion:reduce) { .duck-guide *, .duck-spotlight * { animation:none!important; transition:none!important; } }
+
+/* Keep the positioning control beside Buddy, clear of the platform below him. */
+.buddy-dock-toggle { position:absolute; top:16px; left:calc(100% + 5px); width:141px; padding:5px 7px; font-size:9px!important; white-space:nowrap; box-shadow:2px 2px 0 #393329; border-color:#393329; }
+.duck-walker[data-controls-side="left"] .buddy-dock-toggle { left:auto; right:calc(100% + 5px); }
+.duck-walker[data-controls-side="above"] .buddy-dock-toggle { left:50%; right:auto; top:-27px; transform:translateX(-50%); }
+.buddy-settings { display:flex; flex-wrap:wrap; justify-content:flex-end; align-items:center; gap:6px; padding:7px 12px 0; }
+.buddy-settings .duck-panel-position { margin:0; }
+.buddy-speech { position:fixed; top:0; left:0; z-index:3; width:max-content; max-width:min(216px,calc(100vw - 20px)); padding:8px 10px; border:1px solid #a99a7b; border-radius:8px; background:#fff9e9; color:#4d402c; box-shadow:2px 3px 0 #54462d22; font:11px/1.45 "Courier New",monospace; text-align:left; pointer-events:none; }
+.buddy-speech:after { content:""; position:absolute; bottom:-5px; left:calc(var(--buddy-tail-x,40px) - 4px); width:8px; height:8px; border-right:1px solid #a99a7b; border-bottom:1px solid #a99a7b; background:#fff9e9; transform:rotate(45deg); }
+.buddy-speech[data-below="true"]:after { top:-5px; bottom:auto; transform:rotate(225deg); }

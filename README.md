@@ -63,9 +63,11 @@ ComputerScience/
 
 ## Buddy — il cane guida
 
-Buddy è un cagnolino pixel art cliccabile, senza AI o dipendenze JavaScript. Cammina lungo il bordo basso, si ferma quando lo avvicini con il mouse e dopo qualche secondo si siede. Cliccandolo apri la guida alle quattro materie. I comandi per gli angoli sono dentro la guida: sulla pagina resta soltanto il cane.
+Buddy è un cagnolino pixel art cliccabile, senza AI o dipendenze JavaScript. Cammina sui bordi superiori dei quattro riquadri nella homepage e dei pulsanti delle risorse nelle pagine interne, passando al successivo con un salto. Le superfici si ricavano dagli elementi `data-buddy-platform`, senza un numero fisso di corsi o link. Il percorso segue le superfici visibili e si aggiorna quando si scorre o si ridimensiona la pagina.
 
-Il pulsante **Metti negli angoli** permette di fissarlo **in basso a sinistra** o **in basso a destra**; **Torna a girare** riprende la camminata. La preferenza è conservata localmente tra pagine e visite. Il movimento si ferma mentre si passa sopra il cane, si usa la tastiera, si apre la chat o la scheda non è visibile; rispetta la preferenza di movimento ridotto.
+**Metti negli angoli**, accanto al cane e dentro la guida, permette di fissarlo in basso a sinistra o a destra; **Torna sui riquadri** riprende il percorso. La preferenza resta locale. Il cane si ferma quando lo avvicini con il mouse, usi la tastiera o apri la guida; rispetta la preferenza di movimento ridotto.
+
+Buddy mostra 56 battute originali su studio, informatica e vita a Camerino, inclusi gli spunti dell'utente su Enrico Papi e il Dada. Il fumetto compare per pochi secondi, con pause fra una frase e l'altra e senza ripetizioni immediate. Puoi sospenderlo con **Battute: attive / in pausa**, dentro la guida. Le battute non sono risposte AI e non inviano dati a servizi esterni.
 
 - Scrivi ad esempio **“Webex di ML”**, **“appunti CSD”**, **“Classroom AAM”** o **“registrazioni”** dopo aver scelto un corso.
 - I pulsanti rapidi permettono di scegliere materia e risorsa; il corso selezionato viene ricordato nella scheda del browser.
@@ -74,7 +76,7 @@ Il pulsante **Metti negli angoli** permette di fissarlo **in basso a sinistra** 
 
 I collegamenti vengono generati da `_includes/duck-guide.html` leggendo i medesimi campi `index.md` delle pagine: non occorre aggiornare un secondo elenco. Le domande non vengono trasmesse né salvate; `sessionStorage` conserva solo la materia selezionata. Le richieste GitHub per la data di aggiornamento delle pagine restano indipendenti dalla guida.
 
-Il motore di ricerca è in `assets/js/guide-engine.js`; interfaccia e cerchio sono in `assets/js/duck-guide.js` e `assets/css/duck-guide.css`. La mascotte usa la tavola originale di [rmazanek su OpenGameArt](https://opengameart.org/content/dog-3), pubblicata con licenza CC0, basata sui lavori di Shepardskin e Hellkipz. `assets/img/pixel-dog.png` è il PNG originale, senza modifiche. Crediti e formato sono in `assets/img/pixel-dog.LICENSE.txt`. Percorso e sequenze di camminata, sosta e seduta sono gestiti da `assets/js/duck-motion.js`.
+Il motore di ricerca è in `assets/js/guide-engine.js`; interfaccia e cerchio sono in `assets/js/duck-guide.js` e `assets/css/duck-guide.css`. La mascotte usa la tavola originale di [rmazanek su OpenGameArt](https://opengameart.org/content/dog-3), pubblicata con licenza CC0, basata sui lavori di Shepardskin e Hellkipz. `assets/img/pixel-dog.png` è il PNG originale, senza modifiche. Crediti e formato sono in `assets/img/pixel-dog.LICENSE.txt`. Percorso, salti e sequenze di camminata, sosta e seduta sono gestiti da `assets/js/duck-motion.js`; frasi e fumetti da `assets/js/buddy-banter.js`.
 
 Verifica della logica e della sintassi, con Node.js 18 o successivo:
 
