@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { bounds, clamp, step, spritePose, walkFrame, advanceWalk } = require('../assets/js/duck-motion.js');
+const { bounds, clamp, step, gait, advanceWalk } = require('../assets/js/duck-motion.js');
 test('both dock positions fit a desktop and a phone viewport', () => {
   for (const [w, h, aw, ah] of [[1365, 937, 176, 184], [320, 568, 140, 162]]) {
     const box = bounds(w, h, aw, ah);
@@ -28,19 +28,27 @@ test('arriving at an existing destination does not divide by zero', () => {
 test('a zero movement budget keeps position unchanged', () => {
   assert.deepEqual(step({ x: 3, y: 4 }, { x: 20, y: 40 }, 0), { x: 3, y: 4, arrived: false });
 });
-test('walking and standing share the same face, head height and foot baseline', () => {
-  // Independent measurements of the source PNG: face X, silhouette top and feet Y.
-  for (const [index, face, top, feet] of [[0, .536, .07, .9459], [1, .5282, .07, .9414], [2, .5418, .07, .9434], [4, .455, .02, .9413], [6, .4718, .02, .9413]]) {
-    const p = spritePose(index);
-    assert.ok(Math.abs(.5 + (face - .5) * p.scale + p.x - .536) < .00001);
-    assert.ok(Math.abs(.944 + (top - .944) * p.scale + p.y - .07) < .00001);
-    assert.ok(Math.abs(.944 + (feet - .944) * p.scale + p.y - .944) < .00001);
+test('the planted foot stays at the same screen position through its contact phase', () => {
+  const width = 96, stride = width * .20;
+  const plantedX = 2.4 * width / 48;
+  for (const fraction of [0, .1, .2, .3, .4, .49]) {
+    const distance = stride * fraction;
+    const pose = gait(distance, width);
+    assert.equal(pose.front.y, 0);
+    assert.ok(Math.abs(distance + pose.front.x * width / 48 - plantedX) < .00001);
   }
 });
-test('gait advances with travelled distance and excludes the exaggerated kick', () => {
-  const stride = 164 * .32;
-  assert.deepEqual([0, .25, .5, .75, 1].map(p => walkFrame(stride * p + .00001, 164)), [0, 1, 2, 1, 0]);
-  assert.equal(walkFrame(13, 164), walkFrame(6.5, 82));
+test('feet alternate contact and lift without stretching when the character is resized', () => {
+  for (let i = 0; i < 100; i++) {
+    const pose = gait(i * .1, 96);
+    const small = gait(i * .1 * 80 / 96, 80);
+    for (const foot of ['front', 'back']) {
+      assert.ok(Math.abs(pose[foot].x) <= 2.400001);
+      assert.ok(pose[foot].y <= .00001 && pose[foot].y >= -1.700001);
+      assert.ok(Math.abs(pose[foot].x - small[foot].x) < .00001);
+    }
+    assert.ok(Math.abs(pose.front.y) < .00001 || Math.abs(pose.back.y) < .00001);
+  }
 });
 test('a patrol accelerates, brakes and arrives on the same horizontal ground line', () => {
   let p = { x: 0, y: 700 }, speed = 0, distance = 0, arrived = false;

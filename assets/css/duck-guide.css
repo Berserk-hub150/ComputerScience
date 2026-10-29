@@ -53,29 +53,32 @@
 .duck-spotlight-label button { width:26px; height:26px; border:1px solid #282332; background:#fffdf7; cursor:pointer; font-size:18px; flex-shrink:0; }
 @keyframes duck-bob { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
 @keyframes duck-draw { from { stroke-dashoffset:1400; } to { stroke-dashoffset:0; } }
-@media(max-width:600px) { body:has(.duck-guide) { padding-bottom:190px; } .duck-guide { right:12px; bottom:max(12px,env(safe-area-inset-bottom)); } .duck-orbit { width:82px; height:82px; } .duck-orbit img { width:80px; height:80px; } .duck-invite { right:85px; top:20px; width:151px; font-size:10px; } .duck-launcher-label { font-size:8px; } .duck-panel { width:min(392px,calc(100vw - 30px)); height:570px; max-height:calc(100dvh - 30px); } .duck-form input { font-size:16px; } .duck-header h2 { font-size:18px; } }
+@media(max-width:600px) { body:has(.duck-guide) { padding-bottom:150px; } .duck-guide { right:12px; bottom:max(12px,env(safe-area-inset-bottom)); } .duck-orbit { width:82px; height:82px; } .duck-orbit img { width:80px; height:80px; } .duck-invite { right:85px; top:20px; width:151px; font-size:10px; } .duck-launcher-label { font-size:8px; } .duck-panel { width:min(392px,calc(100vw - 30px)); height:570px; max-height:calc(100dvh - 30px); } .duck-form input { font-size:16px; } .duck-header h2 { font-size:18px; } }
 @media(prefers-reduced-motion:reduce) { .duck-guide *, .duck-spotlight * { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
 
 /* Grounded companion. JavaScript synchronizes poses to distance travelled. */
 .duck-guide { inset:0; pointer-events:none; }
 .duck-walker, .duck-panel, .duck-position-menu { pointer-events:auto; }
-.duck-walker { position:fixed; top:0; left:0; width:188px; display:flex; flex-direction:column; align-items:center; gap:8px; will-change:transform; transform:translate3d(calc(100vw - 200px),calc(100dvh - 244px),0); }
+.duck-walker { position:fixed; top:0; left:0; width:148px; display:flex; flex-direction:column; align-items:center; gap:8px; will-change:transform; transform:translate3d(calc(100vw - 160px),calc(100dvh - 166px),0); }
 .duck-walker { transition:none; }
 .duck-guide .duck-panel { position:fixed; right:24px; bottom:18px; }
 .duck-guide[data-side="left"] .duck-panel { right:auto; left:24px; }
-/* Four walking frames and four idle poses, authored as one transparent sheet. */
-.duck-orbit { position:relative; width:164px; height:164px; border:0; box-shadow:none; border-radius:0; background:radial-gradient(ellipse at 50% 88%,#b198cc24 0%,transparent 65%); }
+/* One small SVG, two feet and a scarf: no changing pictures or proportions. */
+.duck-orbit { position:relative; width:96px; height:96px; border:0; box-shadow:none; border-radius:0; background:none; }
 .duck-orbit:before { display:none; }
-.duck-ground-shadow { position:absolute; width:90px; height:9px; border-radius:50%; background:#36273e26; bottom:9px; left:37px; filter:blur(1px); }
-.duck-sprite { display:block; width:164px; height:164px; position:relative; transform:scaleX(var(--duck-direction,1)); }
-.duck-frame, .duck-portrait { background-image:url('../img/paper-detective-sprites-v2.png'); background-size:400% 200%; background-repeat:no-repeat; image-rendering:auto; }
-.duck-frame { display:block; width:100%; height:100%; background-position:0% 100%; transform-origin:50% 94.4%; will-change:transform; }
-.duck-portrait { display:block; width:58px; height:58px; flex-shrink:0; background-position:0% 100%; }
+.duck-ground-shadow { position:absolute; width:54px; height:5px; border-radius:50%; background:#36273e20; bottom:2px; left:21px; }
+.duck-sprite { display:block; width:96px; height:96px; position:relative; overflow:visible; transform:scaleX(var(--duck-direction,1)); }
+.tiny-duck-foot { transform-box:view-box; }
+.tiny-duck-scarf-tail { transform-origin:13px 28px; }
+.tiny-duck-eyes { transform-origin:30px 21px; }
+.duck-sprite.is-blinking .tiny-duck-eyes { transform:scaleY(.12); }
+.duck-portrait { display:block; width:52px; height:52px; flex-shrink:0; }
+.duck-portrait .duck-sprite { width:52px; height:52px; transform:none; }
 .duck-launcher-label { padding:5px 10px; background:#39244f; border:1px solid #24172e; border-radius:4px; color:#fff1c2; box-shadow:0 2px 0 #20182b25; font-size:9px; letter-spacing:.5px; }
 .duck-launcher:hover .duck-orbit { transform:none; }
-.duck-walker .duck-invite { opacity:0; transition:opacity .15s; top:45px; right:160px; }
+.duck-walker .duck-invite { opacity:0; transition:opacity .15s; top:16px; right:106px; }
 .duck-walker:hover .duck-invite, .duck-walker:focus-within .duck-invite { opacity:1; }
-.duck-walker[data-bubble="right"] .duck-invite { right:auto; left:160px; }
+.duck-walker[data-bubble="right"] .duck-invite { right:auto; left:106px; }
 .duck-walker[data-bubble="right"] .duck-invite:after { right:auto; left:-6px; transform:rotate(225deg); }
 .duck-position-toggle { display:block; background:#fffdf7; border:2px solid #282332; box-shadow:2px 2px 0 #282332; padding:6px 8px; font-size:10px!important; font-weight:bold!important; color:#51346d; }
 .duck-panel-position { align-self:flex-end; margin:7px 12px 0; font-size:9px!important; }
@@ -86,9 +89,9 @@
 .duck-position-menu button[aria-pressed="true"] { background:#ffe28d; border-color:#776038; }
 @media(max-width:600px) {
   .duck-walker { width:140px; }
-  .duck-orbit { width:124px; height:124px; }
-  .duck-sprite { width:124px; height:124px; }
-  .duck-ground-shadow { width:70px; left:27px; bottom:6px; }
+  .duck-orbit { width:80px; height:80px; }
+  .duck-sprite { width:80px; height:80px; }
+  .duck-ground-shadow { width:46px; left:17px; bottom:1px; }
   .duck-walker .duck-invite { display:none; }
   .duck-position-toggle { font-size:9px!important; }
   .duck-guide .duck-panel { right:12px; bottom:max(12px,env(safe-area-inset-bottom)); }

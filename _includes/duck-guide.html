@@ -1,5 +1,5 @@
-<link rel="preload" as="image" href="{{ '/assets/img/paper-detective-sprites-v2.png' | relative_url }}">
-<link rel="stylesheet" href="{{ '/assets/css/duck-guide.css' | relative_url }}">
+{% assign duck_asset_version = site.time | date: '%Y%m%d%H%M%S' %}
+<link rel="stylesheet" href="{{ '/assets/css/duck-guide.css' | relative_url }}?v={{ duck_asset_version }}">
 <aside class="duck-guide" id="duck-guide" aria-label="Guida alle risorse" data-current-course="{{ page.code | downcase }}">
   <div class="duck-walker" id="duck-walker">
   <button class="duck-launcher" id="duck-launcher" type="button" aria-expanded="false" aria-controls="duck-panel" aria-label="Apri Paper Detective, la guida ai corsi">
@@ -11,7 +11,7 @@
   </div>
   <section class="duck-panel" id="duck-panel" role="dialog" aria-modal="false" aria-labelledby="duck-title" hidden>
     <header class="duck-header">
-      <span class="duck-portrait" aria-hidden="true"></span>
+      <span class="duck-portrait" aria-hidden="true">{% include duck-sprite.html %}</span>
       <div><span class="duck-kicker">UFFICIO OGGETTI… TROVATI</span><h2 id="duck-title">Paper Detective<span aria-hidden="true">_</span></h2><p>La tua guida ai quattro corsi</p></div>
       <button class="duck-close" id="duck-close" type="button" aria-label="Chiudi la guida">×</button>
     </header>
@@ -48,6 +48,6 @@
   "palozz": {{ course.course_materials_url | jsonify }}
 }{% unless forloop.last %},{% endunless %}{% endfor %}
 ]</script>
-<script src="{{ '/assets/js/guide-engine.js' | relative_url }}" defer></script>
-<script src="{{ '/assets/js/duck-motion.js' | relative_url }}" defer></script>
-<script src="{{ '/assets/js/duck-guide.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/guide-engine.js' | relative_url }}?v={{ duck_asset_version }}" defer></script>
+<script src="{{ '/assets/js/duck-motion.js' | relative_url }}?v={{ duck_asset_version }}" defer></script>
+<script src="{{ '/assets/js/duck-guide.js' | relative_url }}?v={{ duck_asset_version }}" defer></script>
