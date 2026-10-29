@@ -36,21 +36,17 @@ Ogni pagina mostra **Appunti Notion**, **Webex** e i collegamenti aggiuntivi rea
 
 Rimangono disponibili i collegamenti agli appunti Notion e alla scheda Palozz originale. Per aggiornare altri link basta modificare la rispettiva pagina `index.md` su GitHub.
 
-## Aggiungere link (facilissimo)
+## Modificare i collegamenti
 
-1. Apri il file `index.md` dentro la cartella della materia (per esempio [`machine-learning/index.md`](machine-learning/index.md)).
-2. Premi la **matita** di GitHub per modificare il file.
-3. Sotto **Lezioni e slide**, **Esercizi** o **Progetti e risorse**, inserisci i link con questa sintassi:
+Apri il file `index.md` della materia e usa la matita di GitHub per modificare i link presenti nella parte iniziale del file.
 
-```markdown
-- [Slide lezione 1](https://esempio.it/slide.pdf)
-- [Esercizi settimana 1](https://esempio.it/esercizi)
-- [Progetto GitHub](https://github.com/utente/progetto)
-```
+- `original_url`: appunti Notion
+- `webex_url`: incontro Webex
+- `learning_url` e `learning_label`: Moodle o Classroom, se disponibili
+- `recordings_url`: registrazioni, se disponibili
+- `course_materials_url`: scheda Palozz
 
-4. Elimina la scritta *Materiale in arrivo* della sezione che hai riempito, poi premi **Commit changes**.
-
-**Fatto.** GitHub Pages rigenera la pagina senza che tu debba modificare HTML o CSS.
+Dopo aver modificato un URL, premi **Commit changes**. Le pagine non contengono sezioni vuote o testi provvisori.
 
 ## Struttura
 
