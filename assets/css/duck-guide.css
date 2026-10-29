@@ -56,11 +56,11 @@
 @media(max-width:600px) { body:has(.duck-guide) { padding-bottom:190px; } .duck-guide { right:12px; bottom:max(12px,env(safe-area-inset-bottom)); } .duck-orbit { width:82px; height:82px; } .duck-orbit img { width:80px; height:80px; } .duck-invite { right:85px; top:20px; width:151px; font-size:10px; } .duck-launcher-label { font-size:8px; } .duck-panel { width:min(392px,calc(100vw - 30px)); height:570px; max-height:calc(100dvh - 30px); } .duck-form input { font-size:16px; } .duck-header h2 { font-size:18px; } }
 @media(prefers-reduced-motion:reduce) { .duck-guide *, .duck-spotlight * { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
 
-/* Animated companion: independent legs, face, wing and cloak, plus viewport roaming. */
+/* Grounded companion. JavaScript synchronizes poses to distance travelled. */
 .duck-guide { inset:0; pointer-events:none; }
 .duck-walker, .duck-panel, .duck-position-menu { pointer-events:auto; }
 .duck-walker { position:fixed; top:0; left:0; width:188px; display:flex; flex-direction:column; align-items:center; gap:8px; will-change:transform; transform:translate3d(calc(100vw - 200px),calc(100dvh - 244px),0); }
-.duck-guide[data-mode="left"] .duck-walker, .duck-guide[data-mode="right"] .duck-walker { transition:transform .65s cubic-bezier(.22,.7,.22,1); }
+.duck-walker { transition:none; }
 .duck-guide .duck-panel { position:fixed; right:24px; bottom:18px; }
 .duck-guide[data-side="left"] .duck-panel { right:auto; left:24px; }
 /* Four walking frames and four idle poses, authored as one transparent sheet. */
@@ -68,9 +68,8 @@
 .duck-orbit:before { display:none; }
 .duck-ground-shadow { position:absolute; width:90px; height:9px; border-radius:50%; background:#36273e26; bottom:9px; left:37px; filter:blur(1px); }
 .duck-sprite { display:block; width:164px; height:164px; position:relative; transform:scaleX(var(--duck-direction,1)); }
-.duck-sprite-sheet, .duck-portrait { background-image:url('../img/paper-detective-sprites-v2.png'); background-size:400% 200%; background-repeat:no-repeat; image-rendering:auto; }
-.duck-sprite-sheet { background-position:0% 100%; animation:duck-idle-frames 5.6s steps(1,end) infinite; }
-.duck-walker.is-walking .duck-sprite-sheet { animation:duck-walk-frames .64s steps(1,end) infinite; }
+.duck-frame, .duck-portrait { background-image:url('../img/paper-detective-sprites-v2.png'); background-size:400% 200%; background-repeat:no-repeat; image-rendering:auto; }
+.duck-frame { display:block; width:100%; height:100%; background-position:0% 100%; transform-origin:50% 94.4%; will-change:transform; }
 .duck-portrait { display:block; width:58px; height:58px; flex-shrink:0; background-position:0% 100%; }
 .duck-launcher-label { padding:5px 10px; background:#39244f; border:1px solid #24172e; border-radius:4px; color:#fff1c2; box-shadow:0 2px 0 #20182b25; font-size:9px; letter-spacing:.5px; }
 .duck-launcher:hover .duck-orbit { transform:none; }
@@ -85,21 +84,6 @@
 .duck-position-menu button { display:block; width:100%; border:1px solid #bfa9cd; background:#f2e9f8; color:#3e2750; padding:9px 7px; margin-top:5px; text-align:left; font-size:11px; }
 .duck-position-menu button:hover { background:#e1cdef; }
 .duck-position-menu button[aria-pressed="true"] { background:#ffe28d; border-color:#776038; }
-@keyframes duck-walk-frames {
-  0%,24.99% { background-position:0% 0%; }
-  25%,49.99% { background-position:33.333333% 0%; }
-  50%,74.99% { background-position:66.666667% 0%; }
-  75%,99.99% { background-position:100% 0%; }
-  100% { background-position:0% 0%; }
-}
-@keyframes duck-idle-frames {
-  0%,44% { background-position:0% 100%; }
-  45%,70% { background-position:33.333333% 100%; }
-  71%,73% { background-position:66.666667% 100%; }
-  74%,85% { background-position:0% 100%; }
-  86%,96% { background-position:100% 100%; }
-  97%,100% { background-position:0% 100%; }
-}
 @media(max-width:600px) {
   .duck-walker { width:140px; }
   .duck-orbit { width:124px; height:124px; }
@@ -111,5 +95,3 @@
   .duck-guide[data-side="left"] .duck-panel { left:12px; right:auto; }
 }
 @media(prefers-reduced-motion:reduce) { .duck-guide *, .duck-spotlight * { animation:none!important; transition:none!important; } }
-
-@media(prefers-reduced-motion:reduce) { .duck-sprite-sheet { background-position:0% 100%; } }

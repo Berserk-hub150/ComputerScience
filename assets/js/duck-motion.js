@@ -19,6 +19,35 @@
     const ratio = Math.max(0, distance) / length;
     return { x: point.x + dx * ratio, y: point.y + dy * ratio, arrived: false };
   }
+  // Measured anchors in the existing image, expressed as fractions of one cell.
+  // Normalize every pose to the same face position, head height and foot baseline.
+  const anchors = [
+    [0.5360, 0.0700, 0.9459], [0.5282, 0.0700, 0.9414],
+    [0.5418, 0.0700, 0.9434], [0.5293, 0.0500, 0.9437],
+    [0.4550, 0.0200, 0.9413], [0.4537, 0.0200, 0.9413],
+    [0.4718, 0.0200, 0.9413], [0.4640, 0.0200, 0.9413]
+  ];
+  function spritePose(index) {
+    const [face, top, baseline] = anchors[index];
+    const scale = (0.944 - 0.070) / (baseline - top);
+    return { index, column: index % 4, row: Math.floor(index / 4), scale,
+      x: 0.536 - (0.5 + (face - 0.5) * scale),
+      y: 0.944 - (0.944 + (baseline - 0.944) * scale) };
+  }
+  function walkFrame(distance, spriteWidth) {
+    // The high-kick fourth image is unsuitable for a relaxed patrol.
+    return [0, 1, 2, 1][Math.floor(Math.max(0, distance) / (Math.max(1, spriteWidth * 0.32) / 4)) % 4];
+  }
+  function advanceWalk(point, goalX, velocity, seconds, maxSpeed) {
+    const dt = Math.max(0, Math.min(seconds, 0.05));
+    const remaining = Math.abs(goalX - point.x);
+    if (remaining < 0.15) return { x: goalX, y: point.y, speed: 0, moved: remaining, arrived: true };
+    const acceleration = maxSpeed * 2.6;
+    const desired = Math.min(maxSpeed, Math.sqrt(2 * acceleration * remaining));
+    const speed = velocity < desired ? Math.min(desired, velocity + acceleration * dt) : Math.max(desired, velocity - acceleration * dt);
+    const next = step(point, { x: goalX, y: point.y }, (velocity + speed) * 0.5 * dt);
+    return { ...next, speed: next.arrived ? 0 : speed, moved: Math.abs(next.x - point.x) };
+  }
   function init(doc) {
     const root = doc.getElementById('duck-guide');
     const walker = doc.getElementById('duck-walker');
@@ -28,20 +57,25 @@
     const toggles = Array.from(root.querySelectorAll('[data-duck-position-toggle]'));
     const choices = Array.from(menu.querySelectorAll('[data-duck-mode]'));
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const sprite = walker.querySelector('.duck-sprite');
+    const spriteImage = walker.querySelector('.duck-frame');
     let mode = 'roam';
     try { const saved = localStorage.getItem('retro-duck-position'); if (['left', 'right', 'roam'].includes(saved)) mode = saved; } catch (_) {}
     let position = { x: 0, y: 0 }, goal = null, lastTime = 0, frame = 0, timer = 0;
-    let hovered = false, keyboardFocused = false, menuAnchor = null, routeIndex = 0;
+    let hovered = false, keyboardFocused = false, menuAnchor = null;
+    let speed = 0, walkDistance = 0, restUntil = 0, direction = 1, blinkTimer = 0, renderedPose = -1;
+    let spriteWidth = 164;
     let size = { width: 176, height: 178 };
-    const route = [[0.12, 0.35], [0.75, 0.08], [0.88, 0.80], [0.18, 0.95], [0.48, 0.45]];
     function measure() {
       if (walker.hidden) return;
       const rect = walker.getBoundingClientRect();
       size = { width: rect.width, height: rect.height };
+      spriteWidth = sprite.getBoundingClientRect().width;
     }
     function limits() { return bounds(innerWidth, innerHeight, size.width, size.height); }
     function paint() {
       position = clamp(position, limits());
+      position.y = limits().maxY;
       walker.style.transform = 'translate3d(' + position.x.toFixed(2) + 'px,' + position.y.toFixed(2) + 'px,0)';
       walker.dataset.bubble = position.x < innerWidth / 2 ? 'right' : 'left';
     }
@@ -49,38 +83,78 @@
       const box = limits();
       return { x: side === 'left' ? box.minX : box.maxX, y: box.maxY };
     }
+    function renderPose(index) {
+      if (index === renderedPose) return;
+      const pose = spritePose(index);
+      spriteImage.style.backgroundPosition = (pose.column * 100 / 3) + '% ' + (pose.row * 100) + '%';
+      spriteImage.style.transform = 'translate(' + (pose.x * 100) + '%,' + (pose.y * 100) + '%) scale(' + pose.scale + ')';
+      spriteImage.dataset.pose = String(index);
+      renderedPose = index;
+    }
+    function idle() {
+      clearTimeout(blinkTimer);
+      renderPose(4);
+      if (reduced.matches || doc.hidden || walker.hidden) return;
+      blinkTimer = setTimeout(() => {
+        if (walker.classList.contains('is-walking') || doc.hidden || walker.hidden) return;
+        renderPose(6);
+        blinkTimer = setTimeout(idle, 110);
+      }, 5800);
+    }
     function stop() {
       cancelAnimationFrame(frame);
       clearTimeout(timer);
       frame = timer = lastTime = 0;
+      speed = 0;
       walker.classList.remove('is-walking');
+      idle();
     }
     function allowed() { return mode === 'roam' && panel.hidden && menu.hidden && !hovered && !keyboardFocused && !reduced.matches && !doc.hidden; }
     function nextGoal() {
-      const box = limits(), pair = route[routeIndex++ % route.length];
-      return { x: box.minX + (box.maxX - box.minX) * pair[0], y: box.minY + (box.maxY - box.minY) * pair[1] };
+      const box = limits();
+      if (box.maxX - box.minX < 24) return null;
+      return { x: position.x > (box.minX + box.maxX) / 2 ? box.minX : box.maxX, y: box.maxY };
     }
     function tick(time) {
       frame = 0;
       if (!allowed()) { stop(); return; }
-      if (!goal) goal = nextGoal();
-      const delta = lastTime ? Math.min(0.08, (time - lastTime) / 1000) : 0;
+      if (!goal) { stop(); return; }
+      const delta = lastTime ? (time - lastTime) / 1000 : 0;
       lastTime = time;
-      const dx = goal.x - position.x;
-      if (Math.abs(dx) > 1) walker.style.setProperty('--duck-direction', dx < 0 ? '-1' : '1');
-      const moved = step(position, goal, delta * (innerWidth < 600 ? 65 : 95));
+      const moved = advanceWalk(position, goal.x, speed, delta, spriteWidth * 0.30);
+      speed = moved.speed;
+      walkDistance += moved.moved;
       position = moved;
       paint();
       walker.classList.toggle('is-walking', !moved.arrived);
       if (moved.arrived) {
         goal = null;
         lastTime = 0;
-        timer = setTimeout(start, 1400);
-      } else frame = requestAnimationFrame(tick);
+        restUntil = time + 1100;
+        idle();
+        timer = setTimeout(start, 1100);
+      } else {
+        renderPose(walkFrame(walkDistance, spriteWidth));
+        frame = requestAnimationFrame(tick);
+      }
     }
     function start() {
       if (!allowed() || frame) return;
       clearTimeout(timer);
+      const now = performance.now();
+      if (now < restUntil) { timer = setTimeout(start, restUntil - now); return; }
+      if (!goal) goal = nextGoal();
+      if (!goal) { idle(); return; }
+      const facing = goal.x < position.x ? -1 : 1;
+      if (facing !== direction) {
+        direction = facing;
+        walker.style.setProperty('--duck-direction', String(direction));
+        restUntil = now + 180;
+        walkDistance = 0;
+        timer = setTimeout(start, 180);
+        return;
+      }
+      clearTimeout(blinkTimer);
       lastTime = 0;
       frame = requestAnimationFrame(tick);
     }
@@ -123,6 +197,7 @@
       mode = button.dataset.duckMode;
       stop();
       goal = null;
+      restUntil = 0;
       closeMenu(false);
       syncMode();
       try { localStorage.setItem('retro-duck-position', mode); } catch (_) {}
@@ -162,7 +237,8 @@
     syncMode();
     position = corner(mode === 'left' ? 'left' : 'right');
     paint();
+    idle();
     start();
   }
-  return { bounds, clamp, step, init };
+  return { bounds, clamp, step, spritePose, walkFrame, advanceWalk, init };
 }));

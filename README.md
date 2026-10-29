@@ -63,7 +63,7 @@ ComputerScience/
 
 ## Paper Detective
 
-Il papero pixel art animato è una guida locale, senza AI, API esterne o dipendenze JavaScript. È disponibile nella homepage e nelle quattro materie. Cammina nella pagina con zampe alternate e mantello in movimento; quando si ferma, respira, fa l'occhiolino e saluta.
+Il papero pixel art animato è una guida locale, senza AI, API esterne o dipendenze JavaScript. È disponibile nella homepage e nelle quattro materie. Cammina lungo il bordo inferiore con accelerazione e frenata graduali. I passi seguono la distanza percorsa; le pose sono allineate per mantenere stabili dimensioni, viso e appoggio dei piedi. Da fermo resta nella posa di riposo e ogni tanto fa l'occhiolino.
 
 Il pulsante **Metti negli angoli** permette di fissarlo **in basso a sinistra** o **in basso a destra**; **Torna a girare** riprende la camminata. La preferenza è conservata localmente tra pagine e visite. Il movimento si ferma mentre si passa sopra il papero, si usa la tastiera, si apre la chat o la scheda non è visibile; rispetta la preferenza di movimento ridotto.
 
@@ -74,7 +74,7 @@ Il pulsante **Metti negli angoli** permette di fissarlo **in basso a sinistra** 
 
 I collegamenti vengono generati da `_includes/duck-guide.html` leggendo i medesimi campi `index.md` delle pagine: non occorre aggiornare un secondo elenco. Le domande non vengono trasmesse né salvate; `sessionStorage` conserva solo la materia selezionata. Le richieste GitHub per la data di aggiornamento delle pagine restano indipendenti dalla guida.
 
-Il motore di ricerca è in `assets/js/guide-engine.js`; interfaccia e cerchio sono in `assets/js/duck-guide.js` e `assets/css/duck-guide.css`. La mascotte usa uno sprite sheet PNG trasparente (`assets/img/paper-detective-sprites-v2.png`), con quattro pose di camminata e quattro pose di riposo, occhiolino e saluto, animate a fotogrammi da CSS. La stessa grafica compare nella chat. Percorsi e posizione sono gestiti da `assets/js/duck-motion.js`.
+Il motore di ricerca è in `assets/js/guide-engine.js`; interfaccia e cerchio sono in `assets/js/duck-guide.js` e `assets/css/duck-guide.css`. La mascotte usa uno sprite sheet PNG trasparente (`assets/img/paper-detective-sprites-v2.png`), con pose di camminata e riposo selezionate e allineate da JavaScript. La posa con il calcio alto è esclusa dalla camminata; le pose di riposo non si alternano più ciclicamente. La stessa grafica compare nella chat. Percorsi e posizione sono gestiti da `assets/js/duck-motion.js`.
 
 Verifica della logica e della sintassi, con Node.js 18 o successivo:
 
