@@ -1,0 +1,87 @@
+---
+layout: null
+---
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f1e7">
+  <meta name="description" content="Appunti e materiali del primo semestre di Computer Science - Artificial Intelligence.">
+  <title>Computer Science | Retro Notes</title>
+  <style>
+    :root { --bg:#f5f1e7; --ink:#24262c; --muted:#62646c; --card:#fffdf7; }
+    * { box-sizing:border-box; }
+    body { margin:0; padding:45px 20px; background:var(--bg); color:var(--ink); font-family:"Courier New",Courier,monospace; }
+    .wrap { max-width:900px; margin:0 auto; }
+    header { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+    .eyebrow { font-size:12px; font-weight:bold; letter-spacing:2px; color:var(--muted); }
+    h1 { margin:9px 0 6px; font-size:clamp(28px,5vw,44px); line-height:1.1; letter-spacing:-2px; }
+    .subtitle { margin:0; color:var(--muted); font-size:13px; }
+    .stamp { border:2px solid var(--ink); padding:10px 12px; background:#ffe28d; box-shadow:4px 4px 0 var(--ink); font-size:12px; font-weight:bold; }
+    .strip { display:flex; justify-content:space-between; gap:15px; border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); margin:28px 0 22px; padding:11px 2px; font-size:12px; font-weight:bold; }
+    .strip span:last-child { color:var(--muted); }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; }
+    .course { display:flex; flex-direction:column; color:inherit; text-decoration:none; background:var(--card); border:3px solid var(--ink); box-shadow:6px 6px 0 var(--ink); overflow:hidden; min-height:215px; transition:transform .12s,box-shadow .12s; }
+    .course:hover { transform:translate(-2px,-2px); box-shadow:8px 8px 0 var(--ink); }
+    .course:focus-visible { outline:3px dashed #d65b1a; outline-offset:6px; }
+    .bar { display:flex; justify-content:space-between; padding:9px 12px; border-bottom:3px solid var(--ink); font-size:11px; font-weight:bold; }
+    .pink { background:#f2b9c9; } .blue { background:#a9d9ee; } .green { background:#b9dfb5; } .purple { background:#d7c3ee; }
+    .body { display:flex; align-items:center; gap:18px; padding:22px 18px; flex:1; }
+    .pixel { width:92px; height:92px; flex-shrink:0; image-rendering:pixelated; object-fit:cover; border:2px solid var(--ink); background:#fff; }
+    h2 { font-size:20px; line-height:1.23; letter-spacing:-.7px; margin:0 0 13px; }
+    .tag { display:inline-block; padding:6px 7px; border:1px solid var(--ink); color:var(--muted); font-size:10px; }
+    .bottom { display:flex; justify-content:space-between; gap:10px; padding:11px 13px; border-top:1px dashed #b4b2a9; color:var(--muted); font-size:11px; }
+    footer { display:flex; justify-content:space-between; gap:10px 20px; flex-wrap:wrap; margin-top:37px; padding-top:16px; border-top:2px solid var(--ink); color:var(--muted); font-size:11px; }
+    footer a { color:inherit; }
+    .credits { width:100%; line-height:1.8; font-size:10px; }
+    @media(max-width:650px) { body {padding:25px 16px;} .grid {grid-template-columns:1fr; gap:18px;} .course {min-height:170px;} .body {padding:17px 14px;} .pixel {width:82px;height:82px;} h2 {font-size:19px;} .strip {font-size:10px;} }
+    @media(prefers-reduced-motion:reduce) { .course {transition:none;} }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div>
+        <span class="eyebrow">/ COMPUTER SCIENCE /</span>
+        <h1>RETRO NOTES_</h1>
+        <p class="subtitle">Appunti e materiali · Artificial Intelligence</p>
+      </div>
+      <div class="stamp">ANNO 2026/27</div>
+    </header>
+    <div class="strip"><span>01 // PRIMO SEMESTRE</span><span>4 MATERIE</span></div>
+    <section class="grid" aria-label="Materie del primo semestre">
+      <a class="course" href="https://informatica.palozz.com/computer-science/Machine_Learning/" target="_blank" rel="noopener noreferrer">
+        <div class="bar pink"><span>01 / ML</span><span>APRI ↗</span></div>
+        <div class="body"><img class="pixel" src="https://art.pixilart.com/db3253819eeccd9.png" alt="Computer sorridente in pixel art" loading="lazy"><div><h2>Machine Learning</h2><span class="tag">ARTIFICIAL INTELLIGENCE</span></div></div>
+        <div class="bottom"><span>1° SEMESTRE</span><span>APPUNTI ↗</span></div>
+      </a>
+      <a class="course" href="https://informatica.palozz.com/computer-science/Complex_System_Design/" target="_blank" rel="noopener noreferrer">
+        <div class="bar blue"><span>02 / CSD</span><span>APRI ↗</span></div>
+        <div class="body"><img class="pixel" src="https://art.pixilart.com/bfbca2a0e9c0fe5.png" alt="Pianeta Terra in pixel art" loading="lazy"><div><h2>Complex System Design</h2><span class="tag">ARTIFICIAL INTELLIGENCE</span></div></div>
+        <div class="bottom"><span>1° SEMESTRE</span><span>APPUNTI ↗</span></div>
+      </a>
+      <a class="course" href="https://informatica.palozz.com/computer-science/Agent_Based_Adaptive_Modelling/" target="_blank" rel="noopener noreferrer">
+        <div class="bar green"><span>03 / ABM</span><span>APRI ↗</span></div>
+        <div class="body"><img class="pixel" src="https://art.pixilart.com/f80e1a349d6ca51.png" alt="Gatto grigio in pixel art" loading="lazy"><div><h2>Agent-Based Adaptive Modelling</h2><span class="tag">ARTIFICIAL INTELLIGENCE</span></div></div>
+        <div class="bottom"><span>1° SEMESTRE</span><span>APPUNTI ↗</span></div>
+      </a>
+      <a class="course" href="https://informatica.palozz.com/computer-science/Multiagent_System_Lab/" target="_blank" rel="noopener noreferrer">
+        <div class="bar purple"><span>04 / MASL</span><span>APRI ↗</span></div>
+        <div class="body"><img class="pixel" src="https://art.pixilart.com/e93c1fcc8282bf8.gif" alt="Occhi di un robot animato in pixel art" loading="lazy"><div><h2>Multiagent System Lab</h2><span class="tag">ARTIFICIAL INTELLIGENCE</span></div></div>
+        <div class="bottom"><span>1° SEMESTRE</span><span>APPUNTI ↗</span></div>
+      </a>
+    </section>
+    <footer>
+      <span>RETRO NOTES · UNICAM</span>
+      <span>Ultima pubblicazione: <strong>{{ site.time | date: "%d/%m/%Y" }}</strong></span>
+      <span class="credits">Pixel art su Pixilart:
+        <a href="https://www.pixilart.com/art/cute-little-computer-db3253819eeccd9" target="_blank" rel="noopener noreferrer">art-pixel</a> ·
+        <a href="https://www.pixilart.com/art/earth-bfbca2a0e9c0fe5" target="_blank" rel="noopener noreferrer">Graphite</a> ·
+        <a href="https://www.pixilart.com/art/pusheen-cat-f80e1a349d6ca51" target="_blank" rel="noopener noreferrer">PeacePixels</a> ·
+        <a href="https://www.pixilart.com/art/robot-eyes-gif-e93c1fcc8282bf8" target="_blank" rel="noopener noreferrer">GameMatrix</a>.
+      </span>
+    </footer>
+  </main>
+</body>
+</html>
