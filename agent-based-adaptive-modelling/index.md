@@ -6,9 +6,16 @@ code: "ABM"
 tone: "green"
 image: "https://art.pixilart.com/f80e1a349d6ca51.png"
 original_url: "https://app.notion.com/p/AGENT-BASED-ADAPTIVE-MODELLING-408e03416189805cb64ff486ec44ef84"
+course_materials_url: "https://informatica.palozz.com/computer-science/Agent_Based_Adaptive_Modelling/"
 updated: 2026-10-29
 permalink: /agent-based-adaptive-modelling/
 ---
+
+## Moodle e materiale didattico
+
+*Puoi aggiungere qui il collegamento Moodle diretto, le slide e altri materiali.*
+
+<!-- Esempio: - [Moodle del corso](https://indirizzo-vero-del-corso) -->
 
 ## Lezioni e slide
 
