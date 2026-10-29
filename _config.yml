@@ -1,0 +1,6 @@
+# GitHub Pages (project site)
+title: "Computer Science | Retro Notes"
+description: "Appunti e materiali per Artificial Intelligence - UNICAM"
+url: "https://berserk-hub150.github.io"
+baseurl: "/ComputerScience"
+markdown: kramdown
