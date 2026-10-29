@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f1e7">
+  <meta name="description" content="{{ page.title | escape }} - Appunti e materiali Computer Science">
+  <title>{{ page.title | escape }} | Retro Notes</title>
+  <style>
+    :root { --bg:#f5f1e7; --ink:#24262c; --muted:#62646c; --card:#fffdf7; }
+    * { box-sizing:border-box; }
+    body { margin:0; padding:32px 18px 50px; background:var(--bg); color:var(--ink); font-family:"Courier New",Courier,monospace; line-height:1.6; }
+    main { max-width:820px; margin:auto; }
+    a { color:#3347a7; text-underline-offset:3px; }
+    a:focus-visible { outline:3px dashed #d65b1a; outline-offset:4px; }
+    .back { display:inline-block; margin-bottom:26px; font-size:13px; font-weight:bold; color:var(--ink); text-decoration:none; }
+    .back:hover { text-decoration:underline; }
+    .sheet { border:3px solid var(--ink); box-shadow:6px 6px 0 var(--ink); background:var(--card); }
+    .bar { border-bottom:3px solid var(--ink); padding:9px 16px; font-size:12px; font-weight:bold; display:flex; justify-content:space-between; gap:10px; }
+    .pink { background:#f2b9c9; } .blue { background:#a9d9ee; } .green { background:#b9dfb5; } .purple { background:#d7c3ee; }
+    .heading { display:flex; align-items:center; gap:24px; padding:27px 24px 24px; border-bottom:2px dashed #c4c0b7; }
+    .heading img { height:95px; width:95px; object-fit:cover; image-rendering:pixelated; border:2px solid var(--ink); background:#fff; }
+    h1 { margin:0 0 8px; font-size:clamp(23px,4.5vw,36px); letter-spacing:-1px; line-height:1.2; }
+    .label { font-size:12px; color:var(--muted); margin:0; }
+    .content { padding:16px 26px 26px; font-size:14px; }
+    .content h2 { font-size:19px; margin:24px 0 10px; padding-bottom:7px; border-bottom:2px solid #ddd7cc; }
+    .content h3 { font-size:15px; }
+    .content p { margin:10px 0 16px; }
+    .content ul { padding-left:24px; }
+    .content li { padding:3px 0; overflow-wrap:anywhere; }
+    .content blockquote { border-left:4px solid #dbb15f; padding:2px 13px; margin:18px 0; background:#fff4d5; }
+    .content code { background:#eee9df; padding:2px 4px; }
+    .source { display:inline-block; padding:9px 11px; background:#ffe28d; border:2px solid var(--ink); color:var(--ink); text-decoration:none; font-size:12px; font-weight:bold; box-shadow:3px 3px 0 var(--ink); }
+    .source:hover { transform:translate(-1px,-1px); }
+    .meta { display:flex; gap:8px 20px; flex-wrap:wrap; padding:15px 24px; border-top:2px dashed #c4c0b7; color:var(--muted); font-size:11px; }
+    footer { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; padding:25px 0; font-size:11px; color:var(--muted); }
+    footer a { color:inherit; }
+    @media (max-width:520px) { .heading {padding:20px 15px; gap:15px;} .heading img {height:74px;width:74px;} .content {padding:12px 16px 22px;} .meta {padding:13px 16px;} }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="{{ '/' | relative_url }}">← TORNA ALLE MATERIE</a>
+    <article class="sheet">
+      <div class="bar {{ page.tone }}"><span>{{ page.num }} / {{ page.code }}</span><span>1° SEMESTRE · 2026/27</span></div>
+      <div class="heading">
+        <img src="{{ page.image }}" alt="Pixel art di {{ page.title | escape }}">
+        <div>
+          <h1>{{ page.title | escape }}</h1>
+          <p class="label">Artificial Intelligence · UNICAM</p>
+        </div>
+      </div>
+      <div class="content">
+        <a class="source" href="{{ page.original_url }}" target="_blank" rel="noopener noreferrer">APPUNTI DI RIFERIMENTO ↗</a>
+        {{ content }}
+      </div>
+      <div class="meta">
+        <span>Ultimo aggiornamento: <time id="last-updated" datetime="{{ page.updated }}">{{ page.updated | date: "%d/%m/%Y" }}</time></span>
+        <span>I link si possono modificare direttamente da GitHub</span>
+      </div>
+    </article>
+    <footer>
+      <span>RETRO NOTES // COMPUTER SCIENCE</span>
+      <a href="{{ '/' | relative_url }}">TUTTE LE MATERIE ↑</a>
+    </footer>
+  </main>
+  <script>
+    // Usa la data dell'ultimo commit di questa pagina: si aggiorna quando modifichi i link su GitHub.
+    const path = {{ page.path | jsonify }};
+    fetch("https://api.github.com/repos/Berserk-hub150/ComputerScience/commits?path=" + encodeURIComponent(path) + "&per_page=1")
+      .then(r => { if (!r.ok) throw Error("GitHub non disponibile"); return r.json(); })
+      .then(commits => {
+        const iso = commits[0]?.commit?.committer?.date || commits[0]?.commit?.author?.date;
+        if (iso) {
+          const element = document.getElementById("last-updated");
+          element.dateTime = iso;
+          element.textContent = new Date(iso).toLocaleDateString("it-IT", { day:"2-digit", month:"2-digit", year:"numeric" });
+        }
+      })
+      .catch(() => {}); // In assenza di API resta la data iniziale indicata nella pagina.
+  </script>
+</body>
+</html>
