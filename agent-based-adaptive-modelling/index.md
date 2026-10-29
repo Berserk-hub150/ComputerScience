@@ -5,7 +5,7 @@ num: "03"
 code: "ABM"
 tone: "green"
 image: "https://art.pixilart.com/f80e1a349d6ca51.png"
-original_url: "https://informatica.palozz.com/computer-science/Agent_Based_Adaptive_Modelling/"
+original_url: "https://app.notion.com/p/AGENT-BASED-ADAPTIVE-MODELLING-408e03416189805cb64ff486ec44ef84"
 updated: 2026-10-29
 permalink: /agent-based-adaptive-modelling/
 ---
