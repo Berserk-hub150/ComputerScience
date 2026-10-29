@@ -1,16 +1,17 @@
+<link rel="preload" as="image" href="{{ '/assets/img/paper-detective-sprites-v2.png' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/css/duck-guide.css' | relative_url }}">
 <aside class="duck-guide" id="duck-guide" aria-label="Guida alle risorse" data-current-course="{{ page.code | downcase }}">
   <div class="duck-walker" id="duck-walker">
   <button class="duck-launcher" id="duck-launcher" type="button" aria-expanded="false" aria-controls="duck-panel" aria-label="Apri Paper Detective, la guida ai corsi">
     <span class="duck-invite">Psst… cerchi qualcosa?</span>
-    <span class="duck-orbit"><span class="duck-ground-shadow"></span>{% include duck-sprite.svg %}</span>
+    <span class="duck-orbit"><span class="duck-ground-shadow"></span>{% include duck-sprite.html %}</span>
     <span class="duck-launcher-label">PAPER DETECTIVE <span aria-hidden="true">↗</span></span>
   </button>
   <button class="duck-position-toggle" data-duck-position-toggle type="button" aria-expanded="false" aria-controls="duck-position-menu">Metti negli angoli ▾</button>
   </div>
   <section class="duck-panel" id="duck-panel" role="dialog" aria-modal="false" aria-labelledby="duck-title" hidden>
     <header class="duck-header">
-      <img src="{{ '/assets/img/paper-detective.png' | relative_url }}" width="52" height="52" alt="">
+      <span class="duck-portrait" aria-hidden="true"></span>
       <div><span class="duck-kicker">UFFICIO OGGETTI… TROVATI</span><h2 id="duck-title">Paper Detective<span aria-hidden="true">_</span></h2><p>La tua guida ai quattro corsi</p></div>
       <button class="duck-close" id="duck-close" type="button" aria-label="Chiudi la guida">×</button>
     </header>

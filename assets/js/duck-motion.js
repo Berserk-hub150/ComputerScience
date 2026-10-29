@@ -94,8 +94,15 @@
       if (!menuAnchor || menu.hidden) return;
       const anchor = menuAnchor.getBoundingClientRect();
       const width = menu.offsetWidth, height = menu.offsetHeight;
-      const x = Math.max(12, Math.min(anchor.left + anchor.width / 2 - width / 2, innerWidth - width - 12));
-      const y = anchor.top >= height + 20 ? anchor.top - height - 10 : anchor.bottom + 10;
+      let x = anchor.left + anchor.width / 2 - width / 2;
+      let y = anchor.top >= height + 20 ? anchor.top - height - 10 : anchor.bottom + 10;
+      // Keep the character visible while choosing a corner whenever there is room.
+      if (walker.contains(menuAnchor)) {
+        const actor = walker.getBoundingClientRect();
+        if (actor.right + width + 22 <= innerWidth) { x = actor.right + 10; y = actor.bottom - height; }
+        else if (actor.left >= width + 22) { x = actor.left - width - 10; y = actor.bottom - height; }
+      }
+      x = Math.max(12, Math.min(x, innerWidth - width - 12));
       menu.style.left = x + 'px';
       menu.style.top = Math.max(12, Math.min(y, innerHeight - height - 12)) + 'px';
     }

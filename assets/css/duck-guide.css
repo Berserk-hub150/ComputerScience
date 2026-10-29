@@ -53,24 +53,30 @@
 .duck-spotlight-label button { width:26px; height:26px; border:1px solid #282332; background:#fffdf7; cursor:pointer; font-size:18px; flex-shrink:0; }
 @keyframes duck-bob { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
 @keyframes duck-draw { from { stroke-dashoffset:1400; } to { stroke-dashoffset:0; } }
-@media(max-width:600px) { body:has(.duck-guide) { padding-bottom:148px; } .duck-guide { right:12px; bottom:max(12px,env(safe-area-inset-bottom)); } .duck-orbit { width:82px; height:82px; } .duck-orbit img { width:80px; height:80px; } .duck-invite { right:85px; top:20px; width:151px; font-size:10px; } .duck-launcher-label { font-size:8px; } .duck-panel { width:min(392px,calc(100vw - 30px)); height:570px; max-height:calc(100dvh - 30px); } .duck-form input { font-size:16px; } .duck-header h2 { font-size:18px; } }
+@media(max-width:600px) { body:has(.duck-guide) { padding-bottom:190px; } .duck-guide { right:12px; bottom:max(12px,env(safe-area-inset-bottom)); } .duck-orbit { width:82px; height:82px; } .duck-orbit img { width:80px; height:80px; } .duck-invite { right:85px; top:20px; width:151px; font-size:10px; } .duck-launcher-label { font-size:8px; } .duck-panel { width:min(392px,calc(100vw - 30px)); height:570px; max-height:calc(100dvh - 30px); } .duck-form input { font-size:16px; } .duck-header h2 { font-size:18px; } }
 @media(prefers-reduced-motion:reduce) { .duck-guide *, .duck-spotlight * { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
 
 /* Animated companion: independent legs, face, wing and cloak, plus viewport roaming. */
 .duck-guide { inset:0; pointer-events:none; }
 .duck-walker, .duck-panel, .duck-position-menu { pointer-events:auto; }
-.duck-walker { position:fixed; top:0; left:0; width:176px; display:flex; flex-direction:column; align-items:center; gap:8px; will-change:transform; transform:translate3d(calc(100vw - 188px),calc(100dvh - 200px),0); }
+.duck-walker { position:fixed; top:0; left:0; width:188px; display:flex; flex-direction:column; align-items:center; gap:8px; will-change:transform; transform:translate3d(calc(100vw - 200px),calc(100dvh - 244px),0); }
 .duck-guide[data-mode="left"] .duck-walker, .duck-guide[data-mode="right"] .duck-walker { transition:transform .65s cubic-bezier(.22,.7,.22,1); }
 .duck-guide .duck-panel { position:fixed; right:24px; bottom:18px; }
 .duck-guide[data-side="left"] .duck-panel { right:auto; left:24px; }
-.duck-orbit { position:relative; width:112px; height:126px; border:0; box-shadow:none; border-radius:50%; background:radial-gradient(ellipse,#e6d4f480 0%,#f5f1e700 70%); }
-.duck-orbit:before { content:""; position:absolute; inset:12px -3px; border:2px dashed #b496d2; border-radius:50%; opacity:.5; animation:duck-aura 12s linear infinite; }
-.duck-ground-shadow { position:absolute; width:72px; height:9px; border-radius:50%; background:#36273e36; bottom:1px; left:20px; }
-.duck-sprite { width:108px; height:126px; overflow:visible; position:relative; transform:scaleX(var(--duck-direction,1)); }
+/* Four walking frames and four idle poses, authored as one transparent sheet. */
+.duck-orbit { position:relative; width:164px; height:164px; border:0; box-shadow:none; border-radius:0; background:radial-gradient(ellipse at 50% 88%,#b198cc24 0%,transparent 65%); }
+.duck-orbit:before { display:none; }
+.duck-ground-shadow { position:absolute; width:90px; height:9px; border-radius:50%; background:#36273e26; bottom:9px; left:37px; filter:blur(1px); }
+.duck-sprite { display:block; width:164px; height:164px; position:relative; transform:scaleX(var(--duck-direction,1)); }
+.duck-sprite-sheet, .duck-portrait { background-image:url('../img/paper-detective-sprites-v2.png'); background-size:400% 200%; background-repeat:no-repeat; image-rendering:auto; }
+.duck-sprite-sheet { background-position:0% 100%; animation:duck-idle-frames 5.6s steps(1,end) infinite; }
+.duck-walker.is-walking .duck-sprite-sheet { animation:duck-walk-frames .64s steps(1,end) infinite; }
+.duck-portrait { display:block; width:58px; height:58px; flex-shrink:0; background-position:0% 100%; }
+.duck-launcher-label { padding:5px 10px; background:#39244f; border:1px solid #24172e; border-radius:4px; color:#fff1c2; box-shadow:0 2px 0 #20182b25; font-size:9px; letter-spacing:.5px; }
 .duck-launcher:hover .duck-orbit { transform:none; }
-.duck-walker .duck-invite { opacity:0; transition:opacity .15s; top:25px; right:122px; }
+.duck-walker .duck-invite { opacity:0; transition:opacity .15s; top:45px; right:160px; }
 .duck-walker:hover .duck-invite, .duck-walker:focus-within .duck-invite { opacity:1; }
-.duck-walker[data-bubble="right"] .duck-invite { right:auto; left:122px; }
+.duck-walker[data-bubble="right"] .duck-invite { right:auto; left:160px; }
 .duck-walker[data-bubble="right"] .duck-invite:after { right:auto; left:-6px; transform:rotate(225deg); }
 .duck-position-toggle { display:block; background:#fffdf7; border:2px solid #282332; box-shadow:2px 2px 0 #282332; padding:6px 8px; font-size:10px!important; font-weight:bold!important; color:#51346d; }
 .duck-panel-position { align-self:flex-end; margin:7px 12px 0; font-size:9px!important; }
@@ -79,34 +85,31 @@
 .duck-position-menu button { display:block; width:100%; border:1px solid #bfa9cd; background:#f2e9f8; color:#3e2750; padding:9px 7px; margin-top:5px; text-align:left; font-size:11px; }
 .duck-position-menu button:hover { background:#e1cdef; }
 .duck-position-menu button[aria-pressed="true"] { background:#ffe28d; border-color:#776038; }
-.duck-torso { transform-origin:48px 81px; animation:duck-breathe 3s ease-in-out infinite; }
-.duck-cape { transform-origin:48px 47px; animation:duck-cape-flutter 2.1s ease-in-out infinite; }
-.duck-eyes { transform-origin:51px 35px; animation:duck-blink 4.7s steps(1,end) infinite; }
-.duck-beak-lower { animation:duck-quack 7s steps(1,end) infinite; }
-.duck-hat { transform-origin:48px 25px; }
-.duck-wing { transform-origin:65px 59px; animation:duck-wave 5s ease-in-out infinite; }
-.duck-walker.is-walking .duck-leg-front { animation:duck-step .38s steps(2,end) infinite; }
-.duck-walker.is-walking .duck-leg-back { animation:duck-step .38s steps(2,end) infinite; animation-delay:-.19s; }
-.duck-walker.is-walking .duck-torso { animation:duck-waddle .38s ease-in-out infinite; }
-.duck-walker.is-walking .duck-cape { animation:duck-cape-flutter .42s ease-in-out infinite; }
-.duck-walker.is-walking .duck-hat { animation:duck-hat-jiggle .38s ease-in-out infinite; }
-@keyframes duck-step { 0%,100% { transform:translate(-3px,-2px); } 50% { transform:translate(3px,1px); } }
-@keyframes duck-waddle { 0%,100% { transform:translateY(0) rotate(-2deg); } 50% { transform:translateY(-3px) rotate(2deg); } }
-@keyframes duck-cape-flutter { 0%,100% { transform:skewX(-3deg); } 50% { transform:skewX(4deg); } }
-@keyframes duck-blink { 0%,91%,96%,100% { transform:scaleY(1); } 93%,94% { transform:scaleY(.06); } }
-@keyframes duck-quack { 0%,70%,78%,100% { transform:translateY(0); } 72%,75% { transform:translateY(2px); } }
-@keyframes duck-wave { 0%,65%,100% { transform:rotate(0); } 72%,86% { transform:rotate(-9deg); } 79%,93% { transform:rotate(4deg); } }
-@keyframes duck-breathe { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-1px); } }
-@keyframes duck-hat-jiggle { 0%,100% { transform:rotate(0); } 50% { transform:rotate(3deg); } }
-@keyframes duck-aura { to { transform:rotate(360deg); } }
+@keyframes duck-walk-frames {
+  0%,24.99% { background-position:0% 0%; }
+  25%,49.99% { background-position:33.333333% 0%; }
+  50%,74.99% { background-position:66.666667% 0%; }
+  75%,99.99% { background-position:100% 0%; }
+  100% { background-position:0% 0%; }
+}
+@keyframes duck-idle-frames {
+  0%,44% { background-position:0% 100%; }
+  45%,70% { background-position:33.333333% 100%; }
+  71%,73% { background-position:66.666667% 100%; }
+  74%,85% { background-position:0% 100%; }
+  86%,96% { background-position:100% 100%; }
+  97%,100% { background-position:0% 100%; }
+}
 @media(max-width:600px) {
   .duck-walker { width:140px; }
-  .duck-orbit { width:90px; height:104px; }
-  .duck-sprite { width:88px; height:103px; }
-  .duck-ground-shadow { width:60px; left:15px; }
+  .duck-orbit { width:124px; height:124px; }
+  .duck-sprite { width:124px; height:124px; }
+  .duck-ground-shadow { width:70px; left:27px; bottom:6px; }
   .duck-walker .duck-invite { display:none; }
   .duck-position-toggle { font-size:9px!important; }
   .duck-guide .duck-panel { right:12px; bottom:max(12px,env(safe-area-inset-bottom)); }
   .duck-guide[data-side="left"] .duck-panel { left:12px; right:auto; }
 }
 @media(prefers-reduced-motion:reduce) { .duck-guide *, .duck-spotlight * { animation:none!important; transition:none!important; } }
+
+@media(prefers-reduced-motion:reduce) { .duck-sprite-sheet { background-position:0% 100%; } }
