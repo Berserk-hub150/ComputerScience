@@ -23,20 +23,18 @@
 | <img src="https://art.pixilart.com/f80e1a349d6ca51.png" width="56" alt="Gatto pixel art"> | **Agent-Based Adaptive Modelling** | [Apri la pagina](https://berserk-hub150.github.io/ComputerScience/agent-based-adaptive-modelling/) |
 | <img src="https://art.pixilart.com/e93c1fcc8282bf8.gif" width="56" alt="Robot pixel art"> | **Multiagent System Lab** | [Apri la pagina](https://berserk-hub150.github.io/ComputerScience/multiagent-system-lab/) |
 
-## Appunti e materiali del corso
+## Collegamenti diretti dei corsi
 
-In ogni pagina trovi due pulsanti:
+Ogni pagina mostra **Appunti Notion**, **Webex** e i collegamenti aggiuntivi realmente presenti nelle schede di [Palozz](https://github.com/frapalozz/informatica/tree/main/_materie/computer-science). I pulsanti aprono i collegamenti reali, non una pagina intermedia.
 
-- **Appunti Notion** — apre i tuoi appunti del corso.
-- **Materiali del corso** — apre la rispettiva pagina su informatica.palozz.com, dove cercare Moodle e le altre risorse.
+| Materia | Webex | Moodle / Classroom | Registrazioni |
+|---|---|---|---|
+| Machine Learning | [Loreti](https://unicam.webex.com/meet/michele.loreti) | [Moodle 837](https://elearning.unicam.it/course/view.php?id=837) | [Moodle 837](https://elearning.unicam.it/course/view.php?id=837) |
+| Complex System Design | [Corradini](https://unicam.webex.com/meet/flavio.corradini) | Non indicato nella fonte | Non indicate |
+| Agent-Based Adaptive Modelling | [Merelli](https://unicam.webex.com/meet/emanuela.merelli) | [Classroom](https://classroom.google.com/u/1/c/ODg2MTMyNDYwODM3) | Non indicate |
+| Multiagent System Lab | [Merelli](https://unicam.webex.com/meet/emanuela.merelli) | [Classroom](https://classroom.google.com/u/1/c/ODg2MTMyNDYwODM3) | Non indicate |
 
-Se vuoi aggiungere il collegamento **diretto** a Moodle, apri il file `index.md` della materia e inseriscilo sotto `## Moodle e materiale didattico`, per esempio:
-
-```markdown
-- [Apri Moodle del corso](https://indirizzo-vero-del-corso)
-```
-
-I link diretti ai singoli corsi Moodle non sono stati verificati, quindi non sono stati inventati.
+Rimangono disponibili i collegamenti agli appunti Notion e alla scheda Palozz originale. Per aggiornare altri link basta modificare la rispettiva pagina `index.md` su GitHub.
 
 ## Aggiungere link (facilissimo)
 
