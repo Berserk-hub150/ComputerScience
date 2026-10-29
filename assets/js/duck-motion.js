@@ -19,15 +19,9 @@
     const ratio = Math.max(0, distance) / length;
     return { x: point.x + dx * ratio, y: point.y + dy * ratio, arrived: false };
   }
-  function gait(distance, spriteWidth) {
-    // A planted foot travels backwards by exactly the body's travelled distance.
-    // Coordinates belong to the fixed 48 x 48 SVG; the body never changes pose.
-    const phase = Math.max(0, distance) / Math.max(1, spriteWidth * 0.20) % 1;
-    function foot(p) {
-      if (p < .5) return { x: 2.4 - p * 9.6, y: 0 };
-      return { x: -2.4 + (p - .5) * 9.6, y: -Math.sin((p - .5) * Math.PI * 2) * 1.7 };
-    }
-    return { front: foot(phase), back: foot((phase + .5) % 1), scarf: Math.sin(phase * Math.PI * 2) * 3 };
+  function walkFrame(distance, spriteWidth) {
+    // Original, hand-animated six-frame walk cycle, 60 x 38 pixels per cell.
+    return Math.floor(Math.max(0, distance) / Math.max(1, spriteWidth * .45) * 6) % 6;
   }
   function advanceWalk(point, goalX, velocity, seconds, maxSpeed) {
     const dt = Math.max(0, Math.min(seconds, 0.05));
@@ -49,16 +43,14 @@
     const choices = Array.from(menu.querySelectorAll('[data-duck-mode]'));
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     const sprite = walker.querySelector('.duck-sprite');
-    const frontFoot = sprite.querySelector('.tiny-duck-foot-front');
-    const backFoot = sprite.querySelector('.tiny-duck-foot-back');
-    const scarfTail = sprite.querySelector('.tiny-duck-scarf-tail');
     let mode = 'roam';
     try { const saved = localStorage.getItem('retro-duck-position'); if (['left', 'right', 'roam'].includes(saved)) mode = saved; } catch (_) {}
     let position = { x: 0, y: 0 }, goal = null, lastTime = 0, frame = 0, timer = 0;
     let hovered = false, keyboardFocused = false, menuAnchor = null;
-    let speed = 0, walkDistance = 0, restUntil = 0, direction = 1, blinkTimer = 0;
-    let spriteWidth = 96;
-    let size = { width: 176, height: 178 };
+    let speed = 0, walkDistance = 0, restUntil = 0, direction = 1, idleTimer = 0, standingUp = false;
+    let spriteWidth = 90;
+    let size = { width: 90, height: 57 };
+    let pose = { row: 5, column: 0 };
     function measure() {
       if (walker.hidden) return;
       const rect = walker.getBoundingClientRect();
@@ -76,22 +68,27 @@
       const box = limits();
       return { x: side === 'left' ? box.minX : box.maxX, y: box.maxY };
     }
-    function renderGait(moving) {
-      const pose = moving ? gait(walkDistance, spriteWidth) : { front: { x: 0, y: 0 }, back: { x: 0, y: 0 }, scarf: 0 };
-      frontFoot.style.transform = 'translate(' + pose.front.x.toFixed(3) + 'px,' + pose.front.y.toFixed(3) + 'px)';
-      backFoot.style.transform = 'translate(' + pose.back.x.toFixed(3) + 'px,' + pose.back.y.toFixed(3) + 'px)';
-      scarfTail.style.transform = 'rotate(' + pose.scarf.toFixed(3) + 'deg)';
+    function renderPose(row, column) {
+      pose = { row, column };
+      sprite.style.backgroundPosition = (column * 20) + '% ' + (row * 20) + '%';
+      sprite.dataset.animation = row === 1 ? 'walk' : row === 4 ? 'sit' : row === 3 ? 'settle' : 'idle';
+      sprite.dataset.frame = String(column);
     }
     function idle() {
-      clearTimeout(blinkTimer);
-      renderGait(false);
-      sprite.classList.remove('is-blinking');
+      clearTimeout(idleTimer);
+      standingUp = false;
+      renderPose(5, 0);
       if (reduced.matches || doc.hidden || walker.hidden) return;
-      blinkTimer = setTimeout(() => {
+      const since = performance.now();
+      function animateIdle() {
         if (walker.classList.contains('is-walking') || doc.hidden || walker.hidden) return;
-        sprite.classList.add('is-blinking');
-        blinkTimer = setTimeout(idle, 110);
-      }, 5800);
+        const elapsed = performance.now() - since;
+        if (elapsed < 2200) renderPose(5, Math.floor(elapsed / 180) % 4);
+        else if (elapsed < 2620) renderPose(3, Math.min(2, Math.floor((elapsed - 2200) / 140)));
+        else renderPose(4, Math.floor((elapsed - 2620) / 220) % 4);
+        idleTimer = setTimeout(animateIdle, 80);
+      }
+      idleTimer = setTimeout(animateIdle, 80);
     }
     function stop() {
       cancelAnimationFrame(frame);
@@ -113,7 +110,7 @@
       if (!goal) { stop(); return; }
       const delta = lastTime ? (time - lastTime) / 1000 : 0;
       lastTime = time;
-      const moved = advanceWalk(position, goal.x, speed, delta, spriteWidth * 0.30);
+      const moved = advanceWalk(position, goal.x, speed, delta, spriteWidth * 0.45);
       speed = moved.speed;
       walkDistance += moved.moved;
       position = moved;
@@ -126,12 +123,12 @@
         idle();
         timer = setTimeout(start, 1100);
       } else {
-        renderGait(true);
+        renderPose(1, walkFrame(walkDistance, spriteWidth));
         frame = requestAnimationFrame(tick);
       }
     }
     function start() {
-      if (!allowed() || frame) return;
+      if (!allowed() || frame || standingUp) return;
       clearTimeout(timer);
       const now = performance.now();
       if (now < restUntil) { timer = setTimeout(start, restUntil - now); return; }
@@ -146,8 +143,19 @@
         timer = setTimeout(start, 180);
         return;
       }
-      clearTimeout(blinkTimer);
-      sprite.classList.remove('is-blinking');
+      clearTimeout(idleTimer);
+      if (pose.row === 4 || pose.row === 3) {
+        standingUp = true;
+        let column = 2;
+        function rise() {
+          if (!allowed()) { idle(); return; }
+          renderPose(3, column--);
+          if (column >= 0) timer = setTimeout(rise, 90);
+          else timer = setTimeout(() => { standingUp = false; renderPose(5, 0); start(); }, 90);
+        }
+        rise();
+        return;
+      }
       lastTime = 0;
       frame = requestAnimationFrame(tick);
     }
@@ -233,5 +241,5 @@
     idle();
     start();
   }
-  return { bounds, clamp, step, gait, advanceWalk, init };
+  return { bounds, clamp, step, walkFrame, advanceWalk, init };
 }));

@@ -6,12 +6,7 @@
 .duck-guide button { cursor:pointer; }
 .duck-guide button:focus-visible, .duck-guide a:focus-visible, .duck-guide input:focus-visible, .duck-spotlight button:focus-visible { outline:3px solid #ad590c; outline-offset:4px; }
 .duck-launcher { position:relative; display:flex; flex-direction:column; align-items:center; padding:0; border:0; background:none; color:var(--duck-ink); }
-.duck-orbit { display:grid; place-items:center; width:112px; height:112px; border:2px solid #8463a7; border-radius:50%; background:radial-gradient(circle,#eee0ff 0%,#f5f1e7c9 64%,transparent 67%); box-shadow:0 0 0 5px #e5d6ef99; transition:transform .18s; }
-.duck-orbit img { object-fit:contain; image-rendering:pixelated; animation:duck-bob 4s ease-in-out infinite; }
 .duck-launcher:hover .duck-orbit { transform:translateY(-4px) rotate(-3deg); }
-.duck-launcher-label { display:block; position:relative; margin-top:-6px; padding:6px 9px; background:#ffe28d; border:2px solid var(--duck-ink); box-shadow:3px 3px 0 var(--duck-ink); font-size:10px; font-weight:bold; }
-.duck-invite { position:absolute; right:113px; top:32px; width:160px; padding:8px 10px; border:2px solid var(--duck-ink); background:var(--duck-paper); box-shadow:3px 3px 0 #c5b5d4; font-size:11px; white-space:nowrap; }
-.duck-invite:after { content:""; position:absolute; right:-6px; top:13px; width:8px; height:8px; border-top:2px solid var(--duck-ink); border-right:2px solid var(--duck-ink); background:var(--duck-paper); transform:rotate(45deg); }
 .duck-panel { width:392px; height:590px; max-height:calc(100dvh - 40px); display:flex; flex-direction:column; border:3px solid var(--duck-ink); box-shadow:7px 7px 0 var(--duck-ink); background:var(--duck-paper); overflow:hidden; }
 .duck-header { display:flex; flex-wrap:nowrap; align-items:center; justify-content:flex-start; gap:10px; padding:13px 12px; background:#e4d5f0; border-bottom:3px solid var(--duck-ink); }
 .duck-header img { flex-shrink:0; image-rendering:pixelated; }
@@ -51,50 +46,36 @@
 .duck-spotlight ellipse { fill:none; stroke:#7b3eb2; stroke-width:4; stroke-dasharray:1400; stroke-dashoffset:0; filter:drop-shadow(0 0 2px #fff) drop-shadow(0 0 3px #ffe28d); animation:duck-draw .55s ease-out; }
 .duck-spotlight-label { position:absolute; display:flex; align-items:center; gap:9px; max-width:calc(100vw - 20px); border:2px solid #282332; padding:7px 9px; background:#ffe28d; color:#282332; box-shadow:3px 3px 0 #282332; font:bold 11px/1.4 "Courier New",monospace; pointer-events:auto; }
 .duck-spotlight-label button { width:26px; height:26px; border:1px solid #282332; background:#fffdf7; cursor:pointer; font-size:18px; flex-shrink:0; }
-@keyframes duck-bob { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
 @keyframes duck-draw { from { stroke-dashoffset:1400; } to { stroke-dashoffset:0; } }
-@media(max-width:600px) { body:has(.duck-guide) { padding-bottom:150px; } .duck-guide { right:12px; bottom:max(12px,env(safe-area-inset-bottom)); } .duck-orbit { width:82px; height:82px; } .duck-orbit img { width:80px; height:80px; } .duck-invite { right:85px; top:20px; width:151px; font-size:10px; } .duck-launcher-label { font-size:8px; } .duck-panel { width:min(392px,calc(100vw - 30px)); height:570px; max-height:calc(100dvh - 30px); } .duck-form input { font-size:16px; } .duck-header h2 { font-size:18px; } }
+@media(max-width:600px) { body:has(.duck-guide) { padding-bottom:150px; } .duck-guide { right:12px; bottom:max(12px,env(safe-area-inset-bottom)); } .duck-panel { width:min(392px,calc(100vw - 30px)); height:570px; max-height:calc(100dvh - 30px); } .duck-form input { font-size:16px; } .duck-header h2 { font-size:18px; } }
 @media(prefers-reduced-motion:reduce) { .duck-guide *, .duck-spotlight * { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
 
-/* Grounded companion. JavaScript synchronizes poses to distance travelled. */
+/* Buddy: a compact, hand-animated dog. Controls live inside the guide. */
 .duck-guide { inset:0; pointer-events:none; }
 .duck-walker, .duck-panel, .duck-position-menu { pointer-events:auto; }
-.duck-walker { position:fixed; top:0; left:0; width:148px; display:flex; flex-direction:column; align-items:center; gap:8px; will-change:transform; transform:translate3d(calc(100vw - 160px),calc(100dvh - 166px),0); }
-.duck-walker { transition:none; }
-.duck-guide .duck-panel { position:fixed; right:24px; bottom:18px; }
-.duck-guide[data-side="left"] .duck-panel { right:auto; left:24px; }
-/* One small SVG, two feet and a scarf: no changing pictures or proportions. */
-.duck-orbit { position:relative; width:96px; height:96px; border:0; box-shadow:none; border-radius:0; background:none; }
-.duck-orbit:before { display:none; }
-.duck-ground-shadow { position:absolute; width:54px; height:5px; border-radius:50%; background:#36273e20; bottom:2px; left:21px; }
-.duck-sprite { display:block; width:96px; height:96px; position:relative; overflow:visible; transform:scaleX(var(--duck-direction,1)); }
-.tiny-duck-foot { transform-box:view-box; }
-.tiny-duck-scarf-tail { transform-origin:13px 28px; }
-.tiny-duck-eyes { transform-origin:30px 21px; }
-.duck-sprite.is-blinking .tiny-duck-eyes { transform:scaleY(.12); }
-.duck-portrait { display:block; width:52px; height:52px; flex-shrink:0; }
-.duck-portrait .duck-sprite { width:52px; height:52px; transform:none; }
-.duck-launcher-label { margin-top:2px; padding:5px 10px; background:#39244f; border:1px solid #24172e; border-radius:4px; color:#fff1c2; box-shadow:0 2px 0 #20182b25; font-size:9px; letter-spacing:.5px; }
-.duck-launcher:hover .duck-orbit { transform:none; }
-.duck-walker .duck-invite { opacity:0; transition:opacity .15s; top:16px; right:106px; }
-.duck-walker:hover .duck-invite, .duck-walker:focus-within .duck-invite { opacity:1; }
-.duck-walker[data-bubble="right"] .duck-invite { right:auto; left:106px; }
-.duck-walker[data-bubble="right"] .duck-invite:after { right:auto; left:-6px; transform:rotate(225deg); }
-.duck-position-toggle { display:block; background:#fffdf7; border:2px solid #282332; box-shadow:2px 2px 0 #282332; padding:6px 8px; font-size:10px!important; font-weight:bold!important; color:#51346d; }
-.duck-panel-position { align-self:flex-end; margin:7px 12px 0; font-size:9px!important; }
-.duck-position-menu { position:fixed; z-index:2; width:198px; max-width:calc(100vw - 24px); padding:10px; border:2px solid #282332; background:#fffdf7; box-shadow:5px 5px 0 #282332; }
-.duck-position-heading { display:block; margin-bottom:7px; color:#765b8d; font-size:9px; font-weight:bold; letter-spacing:1px; }
-.duck-position-menu button { display:block; width:100%; border:1px solid #bfa9cd; background:#f2e9f8; color:#3e2750; padding:9px 7px; margin-top:5px; text-align:left; font-size:11px; }
-.duck-position-menu button:hover { background:#e1cdef; }
-.duck-position-menu button[aria-pressed="true"] { background:#ffe28d; border-color:#776038; }
+.duck-walker { position:fixed; top:0; left:0; width:90px; height:57px; will-change:transform; transform:translate3d(calc(100vw - 102px),calc(100dvh - 69px),0); transition:none; }
+.duck-launcher { display:block; width:90px; height:57px; border-radius:8px; }
+.duck-sprite, .duck-portrait { background-image:url('../img/pixel-dog.png'); background-repeat:no-repeat; background-size:600% 600%; image-rendering:pixelated; }
+.duck-sprite { display:block; width:90px; height:57px; background-position:0% 100%; transform:scaleX(calc(var(--duck-direction,1) * -1)); }
+.duck-portrait { flex:0 0 60px; width:60px; height:38px; background-position:0% 80%; transform:scaleX(-1); }
+.duck-launcher .duck-invite { position:absolute; bottom:calc(100% + 6px); right:0; width:max-content; padding:5px 8px; border:1px solid #c9c1af; border-radius:6px; color:#534b3c; background:#fffdf7; box-shadow:0 2px 7px #352e2714; font-size:10px; line-height:1.3; white-space:nowrap; opacity:0; transform:translateY(3px); transition:opacity .12s,transform .12s; pointer-events:none; }
+.duck-launcher:hover .duck-invite, .duck-launcher:focus-visible .duck-invite { opacity:1; transform:translateY(0); }
+.duck-launcher .duck-invite:after { content:""; position:absolute; bottom:-4px; right:15px; width:6px; height:6px; background:#fffdf7; border-right:1px solid #c9c1af; border-bottom:1px solid #c9c1af; transform:rotate(45deg); }
+.duck-walker[data-bubble="right"] .duck-invite { left:0; right:auto; }
+.duck-walker[data-bubble="right"] .duck-invite:after { left:15px; right:auto; }
+.duck-guide .duck-panel { position:fixed; right:20px; bottom:16px; border:2px solid #393329; border-radius:10px; box-shadow:0 12px 40px #32282030; }
+.duck-guide[data-side="left"] .duck-panel { right:auto; left:20px; }
+.duck-header { background:#f1e9d8; border-bottom:1px solid #d5ccba; }
+.duck-position-toggle { display:block; background:#fffdf7; border:1px solid #c6bca9; border-radius:4px; padding:6px 9px; font-size:10px!important; color:#66533d; }
+.duck-panel-position { align-self:flex-end; margin:7px 12px 0; }
+.duck-position-menu { position:fixed; z-index:2; width:198px; max-width:calc(100vw - 24px); padding:10px; border:1px solid #bfb39e; border-radius:8px; background:#fffdf7; box-shadow:0 5px 24px #32282025; }
+.duck-position-heading { display:block; margin-bottom:7px; color:#79694f; font-size:9px; font-weight:bold; letter-spacing:1px; }
+.duck-position-menu button { display:block; width:100%; border:1px solid #d0c6b6; border-radius:4px; background:#f7f2e8; color:#534632; padding:9px 7px; margin-top:5px; text-align:left; font-size:11px; }
+.duck-position-menu button:hover { background:#eee3cb; }
+.duck-position-menu button[aria-pressed="true"] { background:#ffe9b6; border-color:#b89a5c; }
 @media(max-width:600px) {
-  .duck-walker { width:140px; }
-  .duck-orbit { width:80px; height:80px; }
-  .duck-sprite { width:80px; height:80px; }
-  .duck-ground-shadow { width:46px; left:17px; bottom:1px; }
-  .duck-walker .duck-invite { display:none; }
-  .duck-position-toggle { font-size:9px!important; }
-  .duck-guide .duck-panel { right:12px; bottom:max(12px,env(safe-area-inset-bottom)); }
+  body:has(.duck-guide) { padding-bottom:90px; }
+  .duck-guide .duck-panel { width:calc(100vw - 24px); right:12px; bottom:max(12px,env(safe-area-inset-bottom)); }
   .duck-guide[data-side="left"] .duck-panel { left:12px; right:auto; }
 }
 @media(prefers-reduced-motion:reduce) { .duck-guide *, .duck-spotlight * { animation:none!important; transition:none!important; } }

@@ -2,17 +2,15 @@
 <link rel="stylesheet" href="{{ '/assets/css/duck-guide.css' | relative_url }}?v={{ duck_asset_version }}">
 <aside class="duck-guide" id="duck-guide" aria-label="Guida alle risorse" data-current-course="{{ page.code | downcase }}">
   <div class="duck-walker" id="duck-walker">
-  <button class="duck-launcher" id="duck-launcher" type="button" aria-expanded="false" aria-controls="duck-panel" aria-label="Apri Paper Detective, la guida ai corsi">
-    <span class="duck-invite">Psst… cerchi qualcosa?</span>
-    <span class="duck-orbit"><span class="duck-ground-shadow"></span>{% include duck-sprite.html %}</span>
-    <span class="duck-launcher-label">PAPER DETECTIVE <span aria-hidden="true">↗</span></span>
+  <button class="duck-launcher" id="duck-launcher" type="button" aria-expanded="false" aria-controls="duck-panel" aria-label="Apri Buddy, il cane guida ai corsi">
+    <span class="duck-invite">Ti aiuto?</span>
+    {% include dog-sprite.html %}
   </button>
-  <button class="duck-position-toggle" data-duck-position-toggle type="button" aria-expanded="false" aria-controls="duck-position-menu">Metti negli angoli ▾</button>
   </div>
   <section class="duck-panel" id="duck-panel" role="dialog" aria-modal="false" aria-labelledby="duck-title" hidden>
     <header class="duck-header">
-      <span class="duck-portrait" aria-hidden="true">{% include duck-sprite.html %}</span>
-      <div><span class="duck-kicker">UFFICIO OGGETTI… TROVATI</span><h2 id="duck-title">Paper Detective<span aria-hidden="true">_</span></h2><p>La tua guida ai quattro corsi</p></div>
+      <span class="duck-portrait" aria-hidden="true"></span>
+      <div><span class="duck-kicker">IL TUO COMPAGNO DI STUDIO</span><h2 id="duck-title">Buddy<span aria-hidden="true">_</span></h2><p>Il cane guida dei tuoi corsi</p></div>
       <button class="duck-close" id="duck-close" type="button" aria-label="Chiudi la guida">×</button>
     </header>
     <div class="duck-context"><span class="duck-status" aria-hidden="true"></span><span id="duck-context">Scegli una materia o scrivi una domanda</span><button id="duck-reset" type="button">Ricomincia</button></div>
@@ -26,7 +24,7 @@
     </form>
     <p class="duck-footnote">Niente AI, solo indizi e link del sito. Le domande restano nel browser.</p>
   </section>
-  <div class="duck-position-menu" id="duck-position-menu" role="group" aria-label="Posizione del papero" hidden>
+  <div class="duck-position-menu" id="duck-position-menu" role="group" aria-label="Posizione del cane" hidden>
     <span class="duck-position-heading">DOVE MI METTO?</span>
     <button type="button" data-duck-mode="left" aria-pressed="false">↙ In basso a sinistra</button>
     <button type="button" data-duck-mode="right" aria-pressed="false">↘ In basso a destra</button>

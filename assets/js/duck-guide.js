@@ -47,7 +47,7 @@
   }
   function message(text, user) {
     const node = el('div', 'duck-message' + (user ? ' duck-message-user' : ''));
-    if (!user) node.append(el('span', 'duck-message-name', 'PAPER DETECTIVE //'));
+    if (!user) node.append(el('span', 'duck-message-name', 'BUDDY //'));
     node.append(el('p', '', text));
     log.append(node);
     // Bound the DOM during a long session; no conversation is stored or sent elsewhere.
@@ -140,7 +140,7 @@
   }
   function welcome() {
     log.replaceChildren();
-    message('Psst… un link scomparso? Ci penso io. Scrivi “Webex di ML”, “appunti CSD” oppure scegli una materia. Con “Mostramelo” ti cerchio il collegamento sulla pagina.');
+    message('Bau! Cerchi un link del corso? Ti accompagno io. Scrivi “Webex di ML”, “appunti CSD” oppure scegli una materia. Con “Mostramelo” ti cerchio il collegamento sulla pagina.');
     updateContext();
     quickActions();
   }

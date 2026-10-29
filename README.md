@@ -61,11 +61,11 @@ ComputerScience/
 └── _config.yml                        # Impostazioni GitHub Pages
 ```
 
-## Paper Detective
+## Buddy — il cane guida
 
-Il piccolo papero pixel art è una guida locale, senza AI, API esterne o dipendenze JavaScript. È disponibile nella homepage e nelle quattro materie. Ha un unico disegno SVG: si muovono solo due zampe e la coda della sciarpa, senza cambiare immagini, forme o proporzioni. Cammina lungo il bordo inferiore con accelerazione e frenata graduali; i passi seguono la distanza percorsa. Da fermo ogni tanto sbatte gli occhi.
+Buddy è un cagnolino pixel art cliccabile, senza AI o dipendenze JavaScript. Cammina lungo il bordo basso, si ferma quando lo avvicini con il mouse e dopo qualche secondo si siede. Cliccandolo apri la guida alle quattro materie. I comandi per gli angoli sono dentro la guida: sulla pagina resta soltanto il cane.
 
-Il pulsante **Metti negli angoli** permette di fissarlo **in basso a sinistra** o **in basso a destra**; **Torna a girare** riprende la camminata. La preferenza è conservata localmente tra pagine e visite. Il movimento si ferma mentre si passa sopra il papero, si usa la tastiera, si apre la chat o la scheda non è visibile; rispetta la preferenza di movimento ridotto.
+Il pulsante **Metti negli angoli** permette di fissarlo **in basso a sinistra** o **in basso a destra**; **Torna a girare** riprende la camminata. La preferenza è conservata localmente tra pagine e visite. Il movimento si ferma mentre si passa sopra il cane, si usa la tastiera, si apre la chat o la scheda non è visibile; rispetta la preferenza di movimento ridotto.
 
 - Scrivi ad esempio **“Webex di ML”**, **“appunti CSD”**, **“Classroom AAM”** o **“registrazioni”** dopo aver scelto un corso.
 - I pulsanti rapidi permettono di scegliere materia e risorsa; il corso selezionato viene ricordato nella scheda del browser.
@@ -74,7 +74,7 @@ Il pulsante **Metti negli angoli** permette di fissarlo **in basso a sinistra** 
 
 I collegamenti vengono generati da `_includes/duck-guide.html` leggendo i medesimi campi `index.md` delle pagine: non occorre aggiornare un secondo elenco. Le domande non vengono trasmesse né salvate; `sessionStorage` conserva solo la materia selezionata. Le richieste GitHub per la data di aggiornamento delle pagine restano indipendenti dalla guida.
 
-Il motore di ricerca è in `assets/js/guide-engine.js`; interfaccia e cerchio sono in `assets/js/duck-guide.js` e `assets/css/duck-guide.css`. La mascotte è un SVG di 48 × 48 unità (`_includes/duck-sprite.html`), con corpo fisso e due zampe alternate. Non carica immagini esterne o sprite sheet; il piede appoggiato resta fermo rispetto al suolo durante il passo. La stessa grafica compare nella chat. Percorsi e posizione sono gestiti da `assets/js/duck-motion.js`.
+Il motore di ricerca è in `assets/js/guide-engine.js`; interfaccia e cerchio sono in `assets/js/duck-guide.js` e `assets/css/duck-guide.css`. La mascotte usa la tavola originale di [rmazanek su OpenGameArt](https://opengameart.org/content/dog-3), pubblicata con licenza CC0, basata sui lavori di Shepardskin e Hellkipz. `assets/img/pixel-dog.png` è il PNG originale, senza modifiche. Crediti e formato sono in `assets/img/pixel-dog.LICENSE.txt`. Percorso e sequenze di camminata, sosta e seduta sono gestiti da `assets/js/duck-motion.js`.
 
 Verifica della logica e della sintassi, con Node.js 18 o successivo:
 

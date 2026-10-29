@@ -49,7 +49,7 @@
     const kinds = detectResources(text);
     const current = courses.find(c => c.id === context);
     if (!text) return { type: 'help', text: 'Dimmi una materia o una risorsa: appunti, Webex, Moodle, Classroom, registrazioni o Palozz.' };
-    if (/^(ciao|salve|ehi|hey|hello|buongiorno|buonasera)$/.test(text)) return { type: 'help', text: 'Ehi! Sono Paper Detective. Quale materiale cerchiamo?' };
+    if (/^(ciao|salve|ehi|hey|hello|buongiorno|buonasera)$/.test(text)) return { type: 'help', text: 'Ehi! Sono Buddy. Quale materiale cerchiamo?' };
     if (has(text, 'merelli') && !selected.length) {
       return { type: 'choose', text: 'Merelli è indicata per AAM e MASL. Quale dei due corsi ti serve?', choices: courses.filter(c => ['abm', 'masl'].includes(c.id)), kinds };
     }

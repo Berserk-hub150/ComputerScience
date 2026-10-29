@@ -1,0 +1,12 @@
+Dog sprite sheet — unmodified dog_medium.png
+
+Source: https://opengameart.org/content/dog-3
+Download: https://opengameart.org/sites/default/files/dog_medium.png
+Author: rmazanek
+Based on work by Shepardskin and Hellkipz, credited in the source page.
+License: CC0 1.0 Universal
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Original layout: 6 columns x 6 rows, each cell 60 x 38 pixels.
+Rows used: walk (row 1, 6 frames), sit transition (row 3, 3 frames),
+sitting idle (row 4, 4 frames), standing idle (row 5, 4 frames).
