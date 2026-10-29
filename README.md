@@ -63,7 +63,9 @@ ComputerScience/
 
 ## Paper Detective
 
-Il papero pixel art in basso a destra è una guida locale, senza AI, API esterne o dipendenze JavaScript. È disponibile nella homepage e nelle quattro materie.
+Il papero pixel art animato è una guida locale, senza AI, API esterne o dipendenze JavaScript. È disponibile nella homepage e nelle quattro materie. Cammina nella pagina con zampe alternate, mantello, battito delle palpebre e movimento dell'ala.
+
+Il pulsante **Metti negli angoli** permette di fissarlo **in basso a sinistra** o **in basso a destra**; **Torna a girare** riprende la camminata. La preferenza è conservata localmente tra pagine e visite. Il movimento si ferma mentre si passa sopra il papero, si usa la tastiera, si apre la chat o la scheda non è visibile; rispetta la preferenza di movimento ridotto.
 
 - Scrivi ad esempio **“Webex di ML”**, **“appunti CSD”**, **“Classroom AAM”** o **“registrazioni”** dopo aver scelto un corso.
 - I pulsanti rapidi permettono di scegliere materia e risorsa; il corso selezionato viene ricordato nella scheda del browser.
@@ -72,12 +74,12 @@ Il papero pixel art in basso a destra è una guida locale, senza AI, API esterne
 
 I collegamenti vengono generati da `_includes/duck-guide.html` leggendo i medesimi campi `index.md` delle pagine: non occorre aggiornare un secondo elenco. Le domande non vengono trasmesse né salvate; `sessionStorage` conserva solo la materia selezionata. Le richieste GitHub per la data di aggiornamento delle pagine restano indipendenti dalla guida.
 
-Il motore di ricerca è in `assets/js/guide-engine.js`; interfaccia e cerchio sono in `assets/js/duck-guide.js` e `assets/css/duck-guide.css`. La mascotte è un PNG trasparente locale; il movimento leggero usa CSS e rispetta la preferenza di movimento ridotto.
+Il motore di ricerca è in `assets/js/guide-engine.js`; interfaccia e cerchio sono in `assets/js/duck-guide.js` e `assets/css/duck-guide.css`. La mascotte in movimento è un SVG pixel art con parti animate (`_includes/duck-sprite.svg`); percorsi e posizione sono gestiti da `assets/js/duck-motion.js`. Il PNG originale rimane nell'intestazione della chat.
 
 Verifica della logica e della sintassi, con Node.js 18 o successivo:
 
 ```sh
-node --test tests/guide-engine.test.cjs
+node --test tests/*.test.cjs
 node --check assets/js/duck-guide.js
 ```
 

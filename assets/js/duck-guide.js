@@ -8,6 +8,7 @@
   if (!courses.length) return;
   const byId = id => courses.find(c => c.id === id);
   const launcher = document.getElementById('duck-launcher');
+  const walker = document.getElementById('duck-walker');
   const panel = document.getElementById('duck-panel');
   const log = document.getElementById('duck-messages');
   const input = document.getElementById('duck-input');
@@ -37,8 +38,9 @@
   function setOpen(open) {
     if (open) priorFocus = document.activeElement;
     panel.hidden = !open;
-    launcher.hidden = open;
+    walker.hidden = open;
     launcher.setAttribute('aria-expanded', String(open));
+    root.dispatchEvent(new CustomEvent('duck-panel-toggle', { detail: { open } }));
     if (open) input.focus({ preventScroll: true });
     else if (priorFocus && priorFocus.isConnected && !panel.contains(priorFocus)) priorFocus.focus({ preventScroll: true });
     else launcher.focus({ preventScroll: true });
@@ -143,6 +145,7 @@
     quickActions();
   }
   launcher.addEventListener('click', () => { clearMark(); setOpen(true); });
+  root.addEventListener('duck-position-change', () => { if (!panel.hidden) setOpen(false); });
   document.getElementById('duck-close').addEventListener('click', () => setOpen(false));
   document.getElementById('duck-reset').addEventListener('click', () => { context = byId(pageCourse) ? pageCourse : ''; welcome(); input.focus(); });
   document.getElementById('duck-form').addEventListener('submit', event => {

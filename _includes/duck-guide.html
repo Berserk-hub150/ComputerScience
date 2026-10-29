@@ -1,10 +1,13 @@
 <link rel="stylesheet" href="{{ '/assets/css/duck-guide.css' | relative_url }}">
 <aside class="duck-guide" id="duck-guide" aria-label="Guida alle risorse" data-current-course="{{ page.code | downcase }}">
+  <div class="duck-walker" id="duck-walker">
   <button class="duck-launcher" id="duck-launcher" type="button" aria-expanded="false" aria-controls="duck-panel" aria-label="Apri Paper Detective, la guida ai corsi">
     <span class="duck-invite">Psst… cerchi qualcosa?</span>
-    <span class="duck-orbit"><img src="{{ '/assets/img/paper-detective.png' | relative_url }}" width="106" height="106" alt="Papero detective pixel art con mantello viola" decoding="async"></span>
+    <span class="duck-orbit"><span class="duck-ground-shadow"></span>{% include duck-sprite.svg %}</span>
     <span class="duck-launcher-label">PAPER DETECTIVE <span aria-hidden="true">↗</span></span>
   </button>
+  <button class="duck-position-toggle" data-duck-position-toggle type="button" aria-expanded="false" aria-controls="duck-position-menu">Metti negli angoli ▾</button>
+  </div>
   <section class="duck-panel" id="duck-panel" role="dialog" aria-modal="false" aria-labelledby="duck-title" hidden>
     <header class="duck-header">
       <img src="{{ '/assets/img/paper-detective.png' | relative_url }}" width="52" height="52" alt="">
@@ -12,6 +15,7 @@
       <button class="duck-close" id="duck-close" type="button" aria-label="Chiudi la guida">×</button>
     </header>
     <div class="duck-context"><span class="duck-status" aria-hidden="true"></span><span id="duck-context">Scegli una materia o scrivi una domanda</span><button id="duck-reset" type="button">Ricomincia</button></div>
+    <button class="duck-position-toggle duck-panel-position" data-duck-position-toggle type="button" aria-expanded="false" aria-controls="duck-position-menu">Metti negli angoli ▾</button>
     <div class="duck-messages" id="duck-messages" role="log" aria-label="Conversazione con la guida" aria-live="polite" aria-relevant="additions"></div>
     <div class="duck-suggestions" id="duck-suggestions" aria-label="Domande rapide"></div>
     <form class="duck-form" id="duck-form">
@@ -21,6 +25,12 @@
     </form>
     <p class="duck-footnote">Niente AI, solo indizi e link del sito. Le domande restano nel browser.</p>
   </section>
+  <div class="duck-position-menu" id="duck-position-menu" role="group" aria-label="Posizione del papero" hidden>
+    <span class="duck-position-heading">DOVE MI METTO?</span>
+    <button type="button" data-duck-mode="left" aria-pressed="false">↙ In basso a sinistra</button>
+    <button type="button" data-duck-mode="right" aria-pressed="false">↘ In basso a destra</button>
+    <button type="button" data-duck-mode="roam" aria-pressed="true">↝ Torna a girare</button>
+  </div>
 </aside>
 <div id="duck-spotlight" class="duck-spotlight" hidden><svg aria-hidden="true"><ellipse></ellipse></svg><div role="status" class="duck-spotlight-label"><span id="duck-spotlight-text">Eccolo qui!</span><button type="button" id="duck-spotlight-close" aria-label="Rimuovi il cerchio">×</button></div></div>
 <script type="application/json" id="duck-course-data">[
@@ -38,4 +48,5 @@
 }{% unless forloop.last %},{% endunless %}{% endfor %}
 ]</script>
 <script src="{{ '/assets/js/guide-engine.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/duck-motion.js' | relative_url }}" defer></script>
 <script src="{{ '/assets/js/duck-guide.js' | relative_url }}" defer></script>

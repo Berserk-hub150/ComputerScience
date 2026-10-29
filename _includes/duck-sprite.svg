@@ -1,0 +1,51 @@
+<svg class="duck-sprite" viewBox="0 0 96 112" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+  <g class="duck-cape">
+    <path fill="#21152f" d="M31 42h31v12h9v17h8v15h7v11H69v-4H51v6H34v-4H13V82h7V65h7z"/>
+    <path fill="#49226b" d="M31 47h27v10h10v18h8v15H60v-4H45v7H24V81h4V64h5z"/>
+    <path fill="#8651b2" d="M29 61h6v22h-5v8H18v-7h7V69h4zm35 9h6v13h6v7H62z"/>
+    <path fill="#c994dc" d="M26 86h5v5H18v-4h8zm42 0h8v4h-8z"/>
+  </g>
+  <g class="duck-leg duck-leg-back">
+    <path fill="#25162b" d="M51 84h13v12h7v5h8v8H52v-5h-8V93h7z"/>
+    <path fill="#dc721b" d="M54 87h7v12h9v5h6v2H54v-5h-7v-7h7z"/>
+    <path fill="#ffca57" d="M54 99h7v5h11v2H54z"/>
+  </g>
+  <g class="duck-leg duck-leg-front">
+    <path fill="#25162b" d="M35 83h15v14h-6v7h-7v6H10v-9h11v-6h10V84z"/>
+    <path fill="#ed8a22" d="M35 87h11v8h-6v7h-7v5H13v-3h11v-6h10z"/>
+    <path fill="#ffcf62" d="M26 101h9v3h-7v3H13v-3h13z"/>
+  </g>
+  <g class="duck-torso">
+    <path fill="#21152f" d="M35 45h25v10h9v26h-4v10H31V80h-5V59h9z"/>
+    <path fill="#653b93" d="M37 50h19v10h10v19h-5v9H34V76h-4V60h7z"/>
+    <path fill="#a271c0" d="M36 53h6v13h-5v15h-4V64h3z"/>
+    <path fill="#eee6d0" d="M43 50h12v8h-4v11h-5V57h-3z"/>
+    <path fill="#37223d" d="M32 74h31v8H32z"/>
+    <path fill="#ffc84d" d="M46 72h12v12H46z"/><path fill="#5a314b" d="M49 75h6v6h-6z"/>
+    <path fill="#ffcb62" d="M60 62h4v4h-4zm0 7h4v4h-4z"/>
+    <path fill="#fff5d9" d="M35 84h8v5h14v-5h7v7H34z"/>
+    <g class="duck-wing">
+      <path fill="#24172d" d="M62 51h8v4h7v-9h5v-8h6v18h-5v8H72v6h-9z"/>
+      <path fill="#fff7e1" d="M65 54h5v5h9v-7h4V42h3v13h-5v7H70v5h-5z"/>
+      <path fill="#c4b8d8" d="M65 62h5v5h-5zm9-3h7v3h-7z"/>
+    </g>
+    <g class="duck-head">
+      <path fill="#24172d" d="M29 21h30v6h10v10h9v9h-9v9H45v-4H31v-7h-7V29h5z"/>
+      <path fill="#fff5dc" d="M31 25h27v5h8v10h8v4H63v9H46v-5H33v-7h-6V30h4z"/>
+      <path fill="#cfc4df" d="M28 33h5v8h6v6h-6v-7h-5zm20 15h13v5H48z"/>
+      <path fill="#261c36" d="M35 29h31v7h5v7H59v-4H38v-4h-3z"/>
+      <g class="duck-eyes"><path fill="#fffbe9" d="M41 31h7v8h-5v-3h-2zm15 1h7v8h-7z"/><path fill="#8d5db2" d="M46 33h2v5h-2zm12 1h3v6h-3z"/></g>
+      <path fill="#562b1a" d="M51 41h18v3h13v5h-7v6H54v-5h-6v-6h3z"/>
+      <path fill="#ffc54f" d="M53 42h14v4h13v2H65v3H53v-4h-3v-3h3z"/>
+      <g class="duck-beak-lower"><path fill="#df801f" d="M56 50h15v3H58z"/><path fill="#ffe098" d="M59 51h9v2h-9z"/></g>
+      <g class="duck-hat">
+        <path fill="#20152d" d="M27 4h19V0h10v6h6v12h9v5h9v7H63v-4H27v-4H14v-7h8V8h5z"/>
+        <path fill="#623492" d="M29 7h17V3h7v7h6v12H29V18h-9v-3h6V10h3z"/>
+        <path fill="#a26bcc" d="M30 7h5v10h-5zm16-3h7v6h-7z"/>
+        <path fill="#32203d" d="M28 17h32v6H28z"/>
+        <path fill="#ffd16c" d="M47 16h10v9H47z"/><path fill="#5b3272" d="M50 19h4v3h-4z"/>
+        <path fill="#8e55b3" d="M17 19h11v4h34v3h14v2H62v-4H26v-3h-9z"/>
+      </g>
+    </g>
+  </g>
+</svg>
