@@ -1,6 +1,14 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { bounds, clamp, step, walkFrame, advanceWalk, advancePath, perimeterPath, facingForMode, turnAngle, spriteBounds, platformLane, platformOrder, jumpPoint } = require('../assets/js/duck-motion.js');
+const { bounds, clamp, step, walkFrame, advanceWalk, advancePath, perimeterPath, facingForMode, idlePose, turnAngle, spriteBounds, platformLane, platformOrder, jumpPoint } = require('../assets/js/duck-motion.js');
+test('hover starts sitting immediately and stays seated without the normal idle delay', () => {
+  assert.deepEqual(idlePose(0, true, false), { row: 3, column: 0 });
+  assert.deepEqual(idlePose(160, true, false), { row: 3, column: 2 });
+  assert.equal(idlePose(240, true, false).row, 4);
+  assert.equal(idlePose(10000, true, false).row, 4);
+  assert.equal(idlePose(240, false, false).row, 5);
+  assert.deepEqual(idlePose(0, true, true), { row: 4, column: 0 });
+});
 test('docking always faces the site, regardless of the last walking direction', () => {
   for (const previous of [-1, 1]) {
     assert.equal(facingForMode('right', previous), -1);

@@ -80,18 +80,20 @@
   }
   function init(doc) {
     const root = doc.getElementById('duck-guide'), walker = doc.getElementById('duck-walker');
+    const launcher = doc.getElementById('duck-launcher');
     const bubble = doc.getElementById('buddy-speech'), text = doc.getElementById('buddy-speech-text');
     if (!root || !walker || !bubble) return;
     const panel = doc.getElementById('duck-panel'), menu = doc.getElementById('duck-position-menu');
     const toggle = doc.getElementById('buddy-banter-toggle');
-    let enabled = true, queue = [], nextTimer = 0, hideTimer = 0, frame = 0, lastShown = 0, last = '';
+    let enabled = true, hovered = false, queue = [], nextTimer = 0, frame = 0, last = '';
     try { enabled = localStorage.getItem('retro-buddy-banter') !== 'off'; last = sessionStorage.getItem('retro-buddy-last-line') || ''; } catch (_) {}
     function sync() { toggle.setAttribute('aria-pressed', String(enabled)); toggle.textContent = enabled ? 'Battute: attive' : 'Battute: in pausa'; }
-    function hide() { clearTimeout(hideTimer); cancelAnimationFrame(frame); bubble.hidden = true; frame = 0; }
-    function allowed() { return enabled && !doc.hidden && panel.hidden && menu.hidden && !walker.hidden; }
+    function hide() { cancelAnimationFrame(frame); bubble.hidden = true; frame = 0; }
+    function clear() { clearTimeout(nextTimer); nextTimer = 0; hide(); }
+    function allowed() { return hovered && enabled && !doc.hidden && panel.hidden && menu.hidden && !walker.hidden; }
     function place() {
       if (bubble.hidden) return;
-      const r = doc.getElementById('duck-launcher').getBoundingClientRect(), b = bubble.getBoundingClientRect();
+      const r = launcher.getBoundingClientRect(), b = bubble.getBoundingClientRect();
       const p = bubblePosition({ x: r.x, y: r.y, width: r.width, height: r.height }, { width: b.width, height: b.height }, { width: innerWidth, height: innerHeight });
       bubble.style.transform = 'translate3d(' + p.x.toFixed(2) + 'px,' + p.y.toFixed(2) + 'px,0)';
       bubble.style.setProperty('--buddy-tail-x', p.tail + 'px');
@@ -100,31 +102,34 @@
     }
     function show(line) {
       if (!allowed()) return;
-      hide(); text.textContent = line; last = line; lastShown = performance.now();
+      hide(); text.textContent = line; last = line;
       try { sessionStorage.setItem('retro-buddy-last-line', line); } catch (_) {}
-      bubble.hidden = false; place(); hideTimer = setTimeout(hide, 5800);
+      bubble.hidden = false; place();
     }
     function showNext() {
+      if (!allowed()) return;
       if (!queue.length) queue = shuffledLines(Math.random, last);
       show(queue.shift());
-    }
-    function schedule(delay) {
-      clearTimeout(nextTimer);
-      nextTimer = setTimeout(() => { if (allowed()) showNext(); schedule(20000 + Math.random() * 10000); }, delay);
+      nextTimer = setTimeout(() => {
+        hide();
+        if (allowed()) nextTimer = setTimeout(showNext, 700);
+      }, 5200);
     }
     toggle.addEventListener('click', () => {
-      enabled = !enabled; sync(); hide();
+      enabled = !enabled; sync(); clear();
       try { localStorage.setItem('retro-buddy-banter', enabled ? 'on' : 'off'); } catch (_) {}
-      schedule(3000);
     });
-    root.addEventListener('duck-panel-toggle', () => { hide(); if (panel.hidden) schedule(2500); });
-    root.addEventListener('buddy-menu-open', hide);
-    walker.addEventListener('pointerenter', () => { if (performance.now() - lastShown > 10000) showNext(); });
-    doc.addEventListener('visibilitychange', () => { hide(); if (!doc.hidden) schedule(3500); });
+    launcher.addEventListener('pointerenter', event => {
+      if (event.pointerType === 'touch' || hovered) return;
+      hovered = true; clear(); showNext();
+    });
+    launcher.addEventListener('pointerleave', () => { hovered = false; clear(); });
+    launcher.addEventListener('pointercancel', () => { hovered = false; clear(); });
+    root.addEventListener('duck-panel-toggle', clear);
+    root.addEventListener('buddy-menu-open', clear);
+    root.addEventListener('duck-position-change', () => { hovered = false; clear(); });
+    doc.addEventListener('visibilitychange', () => { hovered = false; clear(); });
     sync();
-    let firstVisit = true;
-    try { firstVisit = sessionStorage.getItem('retro-buddy-introduced') !== 'yes'; sessionStorage.setItem('retro-buddy-introduced', 'yes'); } catch (_) {}
-    nextTimer = setTimeout(() => { if (allowed()) { if (firstVisit) show(phrases[0]); else showNext(); } schedule(20000); }, 1600);
   }
   return { phrases, shuffledLines, bubblePosition, init };
 }));

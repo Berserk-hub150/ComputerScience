@@ -47,6 +47,13 @@
     ];
   }
   function facingForMode(mode, current) { return mode === 'left' ? 1 : mode === 'right' ? -1 : current; }
+  function idlePose(elapsed, hovered, reduced) {
+    if (reduced) return { row: hovered ? 4 : 5, column: 0 };
+    const wait = hovered ? 0 : 2200, duration = hovered ? 240 : 420;
+    if (elapsed < wait) return { row: 5, column: Math.floor(elapsed / 180) % 4 };
+    if (elapsed < wait + duration) return { row: 3, column: Math.min(2, Math.floor((elapsed - wait) / (duration / 3))) };
+    return { row: 4, column: Math.floor((elapsed - wait - duration) / 220) % 4 };
+  }
   function turnAngle(from, to, progress) {
     const t = Math.max(0, Math.min(1, progress));
     return from + (to - from) * t * t * (3 - 2 * t);
@@ -81,13 +88,14 @@
     const root = doc.getElementById('duck-guide'), walker = doc.getElementById('duck-walker');
     if (!root || !walker) return;
     const panel = doc.getElementById('duck-panel'), menu = doc.getElementById('duck-position-menu');
+    const launcher = doc.getElementById('duck-launcher');
     const toggles = Array.from(root.querySelectorAll('[data-duck-position-toggle]'));
     const choices = Array.from(menu.querySelectorAll('[data-duck-mode]'));
     const reduced = matchMedia('(prefers-reduced-motion: reduce)'), sprite = walker.querySelector('.duck-sprite');
     let mode = 'roam';
     try { const saved = localStorage.getItem('retro-duck-position'); if (['left', 'right', 'roam'].includes(saved)) mode = saved; } catch (_) {}
     let position = { x: 0, y: 0 }, goal = null, frame = 0, timer = 0, idleTimer = 0, lastTime = 0;
-    let hovered = false, keyboardFocused = false, menuAnchor = null, speed = 0, walkDistance = 0, restUntil = 0, direction = 1;
+    let hovered = false, petHovered = false, keyboardFocused = false, menuAnchor = null, speed = 0, walkDistance = 0, restUntil = 0, direction = 1;
     let size = { width: 90, height: 57 }, pose = { row: 5, column: 0 }, standingUp = false;
     let surfaces = [], active = null, completed = false, jump = null, geometryFrame = 0;
     let edge = 0, angle = 0, turn = null, laps = 0;
@@ -128,15 +136,15 @@
     function idle() {
       clearTimeout(idleTimer);
       standingUp = false;
-      renderPose(5, 0);
+      const first = idlePose(0, petHovered, reduced.matches);
+      renderPose(first.row, first.column);
       if (reduced.matches || doc.hidden || walker.hidden) return;
       const since = performance.now();
       function animateIdle() {
-        if (walker.classList.contains('is-walking') || jump || turn || doc.hidden || walker.hidden) return;
+        if (walker.classList.contains('is-walking') || (!petHovered && (jump || turn)) || doc.hidden || walker.hidden) return;
         const elapsed = performance.now() - since;
-        if (elapsed < 2200) renderPose(5, Math.floor(elapsed / 180) % 4);
-        else if (elapsed < 2620) renderPose(3, Math.min(2, Math.floor((elapsed - 2200) / 140)));
-        else renderPose(4, Math.floor((elapsed - 2620) / 220) % 4);
+        const next = idlePose(elapsed, petHovered, false);
+        renderPose(next.row, next.column);
         idleTimer = setTimeout(animateIdle, 80);
       }
       idleTimer = setTimeout(animateIdle, 80);
@@ -147,13 +155,16 @@
       walker.classList.remove('is-walking');
       if (jump) {
         if (jump.started !== null) { jump.elapsed = performance.now() - jump.started; jump.started = null; }
-        renderPose(2, 2, 'jump');
-      } else if (turn) {
+      }
+      if (turn) {
         if (turn.started !== null) { turn.elapsed = performance.now() - turn.started; turn.started = null; }
-        renderPose(5, 0, 'turn');
-      } else idle();
+      }
+      if (petHovered) idle();
+      else if (jump) renderPose(2, 2, 'jump');
+      else if (turn) renderPose(5, 0, 'turn');
+      else idle();
     }
-    function allowed() { return mode === 'roam' && !!active && panel.hidden && menu.hidden && !hovered && !keyboardFocused && !reduced.matches && !doc.hidden; }
+    function allowed() { return mode === 'roam' && !!active && panel.hidden && menu.hidden && !hovered && !petHovered && !keyboardFocused && !reduced.matches && !doc.hidden; }
     function refreshSurfaces(reset) {
       measure();
       const previous = active, previousPath = previous ? path(previous) : null;
@@ -305,6 +316,12 @@
     }));
     walker.addEventListener('pointerenter', () => { hovered = true; stop(); });
     walker.addEventListener('pointerleave', () => { hovered = false; start(); });
+    launcher.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') { petHovered = true; stop(); } });
+    launcher.addEventListener('pointerleave', () => {
+      petHovered = false; clearTimeout(idleTimer);
+      if (hovered || mode !== 'roam') idle();
+      start();
+    });
     walker.addEventListener('focusin', event => { keyboardFocused = event.target.matches(':focus-visible'); if (keyboardFocused) stop(); });
     walker.addEventListener('focusout', () => queueMicrotask(() => { keyboardFocused = walker.contains(doc.activeElement) && doc.activeElement.matches(':focus-visible'); start(); }));
     root.addEventListener('duck-panel-toggle', () => { closeMenu(false); stop(); if (panel.hidden) { refreshSurfaces(false); start(); } });
@@ -325,5 +342,5 @@
     reduced.addEventListener('change', () => { stop(); start(); });
     measure(); syncMode(); refreshSurfaces(true); idle(); start();
   }
-  return { bounds, clamp, step, walkFrame, advanceWalk, advancePath, perimeterPath, facingForMode, turnAngle, spriteBounds, platformLane, platformOrder, jumpPoint, init };
+  return { bounds, clamp, step, walkFrame, advanceWalk, advancePath, perimeterPath, facingForMode, idlePose, turnAngle, spriteBounds, platformLane, platformOrder, jumpPoint, init };
 }));
