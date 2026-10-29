@@ -6,9 +6,16 @@ code: "ML"
 tone: "pink"
 image: "https://art.pixilart.com/db3253819eeccd9.png"
 original_url: "https://app.notion.com/p/MACHINE-LEARNING-408e03416189809f9371c928dbae0976"
+course_materials_url: "https://informatica.palozz.com/computer-science/Machine_Learning/"
 updated: 2026-10-29
 permalink: /machine-learning/
 ---
+
+## Moodle e materiale didattico
+
+*Puoi aggiungere qui il collegamento Moodle diretto, le slide e altri materiali.*
+
+<!-- Esempio: - [Moodle del corso](https://indirizzo-vero-del-corso) -->
 
 ## Lezioni e slide
 
