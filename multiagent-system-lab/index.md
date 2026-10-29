@@ -5,7 +5,7 @@ num: "04"
 code: "MASL"
 tone: "purple"
 image: "https://art.pixilart.com/e93c1fcc8282bf8.gif"
-original_url: "https://informatica.palozz.com/computer-science/Multiagent_System_Lab/"
+original_url: "https://app.notion.com/p/MULTIAGENT-SYSTEM-LAB-408e0341618980f19e63fa6586d61079"
 updated: 2026-10-29
 permalink: /multiagent-system-lab/
 ---
