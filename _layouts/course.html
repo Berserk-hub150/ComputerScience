@@ -35,6 +35,9 @@
     .course-links { display:flex; gap:12px; flex-wrap:wrap; margin:4px 0 20px; }
     .course-links .source { margin-bottom:3px; }
     .source-materials { background:#b9dfb5; }
+    .source-webex { background:#a9d9ee; }
+    .source-recordings { background:#d7c3ee; }
+    .source-palozz { background:#ece9e0; }
     .meta { display:flex; gap:8px 20px; flex-wrap:wrap; padding:15px 24px; border-top:2px dashed #c4c0b7; color:var(--muted); font-size:11px; }
     footer { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; padding:25px 0; font-size:11px; color:var(--muted); }
     footer a { color:inherit; }
@@ -56,7 +59,10 @@
       <div class="content">
         <nav class="course-links" aria-label="Risorse principali del corso">
           <a class="source" href="{{ page.original_url }}" target="_blank" rel="noopener noreferrer">APPUNTI NOTION ↗</a>
-          {% if page.course_materials_url %}<a class="source source-materials" href="{{ page.course_materials_url }}" target="_blank" rel="noopener noreferrer">MATERIALI DEL CORSO ↗</a>{% endif %}
+          {% if page.webex_url %}<a class="source source-webex" href="{{ page.webex_url }}" target="_blank" rel="noopener noreferrer">WEBEX ↗</a>{% endif %}
+          {% if page.learning_url %}<a class="source source-materials" href="{{ page.learning_url }}" target="_blank" rel="noopener noreferrer">{{ page.learning_label | default: "MATERIALE" | escape }} ↗</a>{% endif %}
+          {% if page.recordings_url %}<a class="source source-recordings" href="{{ page.recordings_url }}" target="_blank" rel="noopener noreferrer">REGISTRAZIONI ↗</a>{% endif %}
+          {% if page.course_materials_url %}<a class="source source-palozz" href="{{ page.course_materials_url }}" target="_blank" rel="noopener noreferrer">SCHEDA PALOZZ ↗</a>{% endif %}
         </nav>
         {{ content }}
       </div>
