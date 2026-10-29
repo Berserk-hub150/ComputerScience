@@ -61,6 +61,26 @@ ComputerScience/
 └── _config.yml                        # Impostazioni GitHub Pages
 ```
 
+## Paper Detective
+
+Il papero pixel art in basso a destra è una guida locale, senza AI, API esterne o dipendenze JavaScript. È disponibile nella homepage e nelle quattro materie.
+
+- Scrivi ad esempio **“Webex di ML”**, **“appunti CSD”**, **“Classroom AAM”** o **“registrazioni”** dopo aver scelto un corso.
+- I pulsanti rapidi permettono di scegliere materia e risorsa; il corso selezionato viene ricordato nella scheda del browser.
+- **Mostramelo ◎** apre la pagina del corso e cerchia il pulsante esatto. **Esc** chiude la guida o rimuove il cerchio.
+- Se un link non è presente nei dati del corso, la guida lo segnala. Non conosce orari, codici d'accesso, esami o contenuti delle piattaforme esterne.
+
+I collegamenti vengono generati da `_includes/duck-guide.html` leggendo i medesimi campi `index.md` delle pagine: non occorre aggiornare un secondo elenco. Le domande non vengono trasmesse né salvate; `sessionStorage` conserva solo la materia selezionata. Le richieste GitHub per la data di aggiornamento delle pagine restano indipendenti dalla guida.
+
+Il motore di ricerca è in `assets/js/guide-engine.js`; interfaccia e cerchio sono in `assets/js/duck-guide.js` e `assets/css/duck-guide.css`. La mascotte è un PNG trasparente locale; il movimento leggero usa CSS e rispetta la preferenza di movimento ridotto.
+
+Verifica della logica e della sintassi, con Node.js 18 o successivo:
+
+```sh
+node --test tests/guide-engine.test.cjs
+node --check assets/js/duck-guide.js
+```
+
 ## Ultimo aggiornamento
 
 Ogni pagina mostra la data dell'ultimo commit del proprio file, letta dall'API pubblica di GitHub. Se il servizio non è disponibile viene mostrata la data iniziale riportata nel file.

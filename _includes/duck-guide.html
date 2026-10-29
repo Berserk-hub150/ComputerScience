@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="{{ '/assets/css/duck-guide.css' | relative_url }}">
+<aside class="duck-guide" id="duck-guide" aria-label="Guida alle risorse" data-current-course="{{ page.code | downcase }}">
+  <button class="duck-launcher" id="duck-launcher" type="button" aria-expanded="false" aria-controls="duck-panel" aria-label="Apri Paper Detective, la guida ai corsi">
+    <span class="duck-invite">Psst… cerchi qualcosa?</span>
+    <span class="duck-orbit"><img src="{{ '/assets/img/paper-detective.png' | relative_url }}" width="106" height="106" alt="Papero detective pixel art con mantello viola" decoding="async"></span>
+    <span class="duck-launcher-label">PAPER DETECTIVE <span aria-hidden="true">↗</span></span>
+  </button>
+  <section class="duck-panel" id="duck-panel" role="dialog" aria-modal="false" aria-labelledby="duck-title" hidden>
+    <header class="duck-header">
+      <img src="{{ '/assets/img/paper-detective.png' | relative_url }}" width="52" height="52" alt="">
+      <div><span class="duck-kicker">UFFICIO OGGETTI… TROVATI</span><h2 id="duck-title">Paper Detective<span aria-hidden="true">_</span></h2><p>La tua guida ai quattro corsi</p></div>
+      <button class="duck-close" id="duck-close" type="button" aria-label="Chiudi la guida">×</button>
+    </header>
+    <div class="duck-context"><span class="duck-status" aria-hidden="true"></span><span id="duck-context">Scegli una materia o scrivi una domanda</span><button id="duck-reset" type="button">Ricomincia</button></div>
+    <div class="duck-messages" id="duck-messages" role="log" aria-label="Conversazione con la guida" aria-live="polite" aria-relevant="additions"></div>
+    <div class="duck-suggestions" id="duck-suggestions" aria-label="Domande rapide"></div>
+    <form class="duck-form" id="duck-form">
+      <label class="duck-sr-only" for="duck-input">Chiedi dove trovare una risorsa dei corsi</label>
+      <input id="duck-input" name="question" placeholder="Es. dove trovo il Webex di ML?" maxlength="400" autocomplete="off" enterkeyhint="send">
+      <button type="submit" aria-label="Invia la domanda">↵</button>
+    </form>
+    <p class="duck-footnote">Niente AI, solo indizi e link del sito. Le domande restano nel browser.</p>
+  </section>
+</aside>
+<div id="duck-spotlight" class="duck-spotlight" hidden><svg aria-hidden="true"><ellipse></ellipse></svg><div role="status" class="duck-spotlight-label"><span id="duck-spotlight-text">Eccolo qui!</span><button type="button" id="duck-spotlight-close" aria-label="Rimuovi il cerchio">×</button></div></div>
+<script type="application/json" id="duck-course-data">[
+{% assign guide_courses = site.pages | where: 'layout', 'course' | sort: 'num' %}
+{% for course in guide_courses %}{
+  "id": {{ course.code | downcase | jsonify }},
+  "title": {{ course.title | jsonify }},
+  "url": {{ course.url | relative_url | jsonify }},
+  "notion": {{ course.original_url | jsonify }},
+  "webex": {{ course.webex_url | jsonify }},
+  "learning": {{ course.learning_url | jsonify }},
+  "learningLabel": {{ course.learning_label | default: 'Materiale' | jsonify }},
+  "recordings": {{ course.recordings_url | jsonify }},
+  "palozz": {{ course.course_materials_url | jsonify }}
+}{% unless forloop.last %},{% endunless %}{% endfor %}
+]</script>
+<script src="{{ '/assets/js/guide-engine.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/duck-guide.js' | relative_url }}" defer></script>

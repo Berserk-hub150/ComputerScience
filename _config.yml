@@ -4,3 +4,5 @@ description: "Appunti e materiali per Artificial Intelligence - UNICAM"
 url: "https://berserk-hub150.github.io"
 baseurl: "/ComputerScience"
 markdown: kramdown
+exclude:
+  - tests

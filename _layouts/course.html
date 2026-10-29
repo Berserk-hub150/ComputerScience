@@ -58,11 +58,11 @@
       </div>
       <div class="content">
         <nav class="course-links" aria-label="Risorse principali del corso">
-          <a class="source" href="{{ page.original_url }}" target="_blank" rel="noopener noreferrer">APPUNTI NOTION ↗</a>
-          {% if page.webex_url %}<a class="source source-webex" href="{{ page.webex_url }}" target="_blank" rel="noopener noreferrer">WEBEX ↗</a>{% endif %}
-          {% if page.learning_url %}<a class="source source-materials" href="{{ page.learning_url }}" target="_blank" rel="noopener noreferrer">{{ page.learning_label | default: "MATERIALE" | escape }} ↗</a>{% endif %}
-          {% if page.recordings_url %}<a class="source source-recordings" href="{{ page.recordings_url }}" target="_blank" rel="noopener noreferrer">REGISTRAZIONI ↗</a>{% endif %}
-          {% if page.course_materials_url %}<a class="source source-palozz" href="{{ page.course_materials_url }}" target="_blank" rel="noopener noreferrer">SCHEDA PALOZZ ↗</a>{% endif %}
+          <a class="source" id="resource-notion" data-resource="notion" href="{{ page.original_url }}" target="_blank" rel="noopener noreferrer">APPUNTI NOTION ↗</a>
+          {% if page.webex_url %}<a class="source source-webex" id="resource-webex" data-resource="webex" href="{{ page.webex_url }}" target="_blank" rel="noopener noreferrer">WEBEX ↗</a>{% endif %}
+          {% if page.learning_url %}<a class="source source-materials" id="resource-learning" data-resource="learning" href="{{ page.learning_url }}" target="_blank" rel="noopener noreferrer">{{ page.learning_label | default: "MATERIALE" | escape }} ↗</a>{% endif %}
+          {% if page.recordings_url %}<a class="source source-recordings" id="resource-recordings" data-resource="recordings" href="{{ page.recordings_url }}" target="_blank" rel="noopener noreferrer">REGISTRAZIONI ↗</a>{% endif %}
+          {% if page.course_materials_url %}<a class="source source-palozz" id="resource-palozz" data-resource="palozz" href="{{ page.course_materials_url }}" target="_blank" rel="noopener noreferrer">SCHEDA PALOZZ ↗</a>{% endif %}
         </nav>
         {% if content != "" %}{{ content }}{% endif %}
       </div>
@@ -91,5 +91,6 @@
       })
       .catch(() => {}); // In assenza di API resta la data iniziale indicata nella pagina.
   </script>
+  {% include duck-guide.html %}
 </body>
 </html>
