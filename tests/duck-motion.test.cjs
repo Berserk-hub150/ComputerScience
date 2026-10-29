@@ -1,6 +1,46 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { bounds, clamp, step, walkFrame, advanceWalk, platformLane, platformOrder, jumpPoint } = require('../assets/js/duck-motion.js');
+const { bounds, clamp, step, walkFrame, advanceWalk, advancePath, perimeterPath, facingForMode, turnAngle, spriteBounds, platformLane, platformOrder, jumpPoint } = require('../assets/js/duck-motion.js');
+test('docking always faces the site, regardless of the last walking direction', () => {
+  for (const previous of [-1, 1]) {
+    assert.equal(facingForMode('right', previous), -1);
+    assert.equal(facingForMode('left', previous), 1);
+    assert.equal(facingForMode('roam', previous), previous);
+  }
+});
+test('a full patrol reaches all four exact corners and closes the entire perimeter', () => {
+  for (const [width, height] of [[440, 215], [140, 42], [72, 42]]) {
+    const actor = { width: 90, height: 57 };
+    const path = perimeterPath({ left: 200, right: 200 + width, top: 300, height }, actor);
+    let position = path[0], distance = 0;
+    const visited = [];
+    for (let edge = 0; edge < 4; edge++) {
+      let speed = 0, arrived = false;
+      for (let frame = 0; frame < 1800 && !arrived; frame++) {
+        const next = advancePath(position, path[edge + 1], speed, 1 / 60, 70);
+        assert.ok(next.moved < 1.18);
+        position = next; speed = next.speed; distance += next.moved; arrived = next.arrived;
+      }
+      assert.ok(arrived);
+      visited.push([position.x + 45, position.y + 56]);
+    }
+    assert.deepEqual(visited, [[200 + width, 300], [200 + width, 300 + height], [200, 300 + height], [200, 300]]);
+    assert.ok(Math.abs(distance - 2 * (width + height)) < .00001);
+  }
+});
+test('the dog turns continuously and keeps its paws on the border on every side', () => {
+  const actor = { width: 90, height: 57 }, origin = { x: 200, y: 300 };
+  assert.equal(turnAngle(0, 90, 0), 0);
+  assert.equal(turnAngle(0, 90, .5), 45);
+  assert.equal(turnAngle(0, 90, 1), 90);
+  assert.equal(turnAngle(270, 360, 1), 360);
+  const top = spriteBounds(origin, actor, 0), right = spriteBounds(origin, actor, 90);
+  const bottom = spriteBounds(origin, actor, 180), left = spriteBounds(origin, actor, 270);
+  assert.ok(Math.abs(top.bottom - 357) < .00001);
+  assert.ok(Math.abs(right.left - 245) < .00001);
+  assert.ok(Math.abs(bottom.top - 357) < .00001);
+  assert.ok(Math.abs(left.right - 245) < .00001);
+});
 test('both dock positions fit a desktop and a phone viewport', () => {
   for (const [w, h, aw, ah] of [[1365, 937, 176, 184], [320, 568, 140, 162]]) {
     const box = bounds(w, h, aw, ah);

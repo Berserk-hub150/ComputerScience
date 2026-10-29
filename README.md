@@ -63,7 +63,7 @@ ComputerScience/
 
 ## Buddy — il cane guida
 
-Buddy è un cagnolino pixel art cliccabile, senza AI o dipendenze JavaScript. Cammina sui bordi superiori dei quattro riquadri nella homepage e dei pulsanti delle risorse nelle pagine interne, passando al successivo con un salto. Le superfici si ricavano dagli elementi `data-buddy-platform`, senza un numero fisso di corsi o link. Il percorso segue le superfici visibili e si aggiorna quando si scorre o si ridimensiona la pagina.
+Buddy è un cagnolino pixel art cliccabile, senza AI o dipendenze JavaScript. Percorre tutti e quattro i bordi di ogni riquadro nella homepage e di ogni pulsante delle risorse nelle pagine interne. Gira sugli spigoli e passa alla superficie successiva soltanto dopo aver completato il giro. Le superfici si ricavano dagli elementi `data-buddy-platform`, senza un numero fisso di corsi o link. Il percorso si aggiorna quando si scorre o si ridimensiona la pagina. Quando lo fissi in un angolo, guarda verso il centro del sito.
 
 **Metti negli angoli**, accanto al cane e dentro la guida, permette di fissarlo in basso a sinistra o a destra; **Torna sui riquadri** riprende il percorso. La preferenza resta locale. Il cane si ferma quando lo avvicini con il mouse, usi la tastiera o apri la guida; rispetta la preferenza di movimento ridotto.
 

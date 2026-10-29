@@ -55,6 +55,7 @@
 .duck-walker, .duck-panel, .duck-position-menu { pointer-events:auto; }
 .duck-walker { position:fixed; top:0; left:0; width:90px; height:57px; will-change:transform; transform:translate3d(calc(100vw - 102px),calc(100dvh - 69px),0); transition:none; }
 .duck-launcher { display:block; width:90px; height:57px; border-radius:8px; }
+.duck-launcher { transform-origin:50% 100%; transform:rotate(var(--buddy-angle,0deg)); }
 .duck-sprite, .duck-portrait { background-image:url('../img/pixel-dog.png'); background-repeat:no-repeat; background-size:600% 600%; image-rendering:pixelated; }
 .duck-sprite { display:block; width:90px; height:57px; background-position:0% 100%; transform:scaleX(calc(var(--duck-direction,1) * -1)); }
 .duck-portrait { flex:0 0 60px; width:60px; height:38px; background-position:0% 80%; transform:scaleX(-1); }
@@ -82,8 +83,6 @@
 
 /* Keep the positioning control beside Buddy, clear of the platform below him. */
 .buddy-dock-toggle { position:absolute; top:16px; left:calc(100% + 5px); width:141px; padding:5px 7px; font-size:9px!important; white-space:nowrap; box-shadow:2px 2px 0 #393329; border-color:#393329; }
-.duck-walker[data-controls-side="left"] .buddy-dock-toggle { left:auto; right:calc(100% + 5px); }
-.duck-walker[data-controls-side="above"] .buddy-dock-toggle { left:50%; right:auto; top:-27px; transform:translateX(-50%); }
 .buddy-settings { display:flex; flex-wrap:wrap; justify-content:flex-end; align-items:center; gap:6px; padding:7px 12px 0; }
 .buddy-settings .duck-panel-position { margin:0; }
 .buddy-speech { position:fixed; top:0; left:0; z-index:3; width:max-content; max-width:min(216px,calc(100vw - 20px)); padding:8px 10px; border:1px solid #a99a7b; border-radius:8px; background:#fff9e9; color:#4d402c; box-shadow:2px 3px 0 #54462d22; font:11px/1.45 "Courier New",monospace; text-align:left; pointer-events:none; }

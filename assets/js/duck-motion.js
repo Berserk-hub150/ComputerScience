@@ -30,6 +30,33 @@
     const next = step(point, { x: goalX, y: point.y }, (velocity + speed) * .5 * dt);
     return { ...next, speed: next.arrived ? 0 : speed, moved: Math.abs(next.x - point.x) };
   }
+  function advancePath(point, goal, velocity, seconds, maxSpeed) {
+    const remaining = Math.hypot(goal.x - point.x, goal.y - point.y);
+    const travel = advanceWalk({ x: 0, y: 0 }, remaining, velocity, seconds, maxSpeed);
+    return { ...step(point, goal, travel.x), speed: travel.speed, moved: travel.moved };
+  }
+  function perimeterPath(rect, actor) {
+    // Each point is the sprite's unrotated origin. Its feet touch the actual border.
+    const x = actor.width / 2, y = actor.height - 1;
+    return [
+      { x: rect.left - x, y: rect.top - y },
+      { x: rect.right - x, y: rect.top - y },
+      { x: rect.right - x, y: rect.top + rect.height - y },
+      { x: rect.left - x, y: rect.top + rect.height - y },
+      { x: rect.left - x, y: rect.top - y }
+    ];
+  }
+  function facingForMode(mode, current) { return mode === 'left' ? 1 : mode === 'right' ? -1 : current; }
+  function turnAngle(from, to, progress) {
+    const t = Math.max(0, Math.min(1, progress));
+    return from + (to - from) * t * t * (3 - 2 * t);
+  }
+  function spriteBounds(position, actor, angle) {
+    const radians = angle * Math.PI / 180, cos = Math.cos(radians), sin = Math.sin(radians);
+    const corners = [[-actor.width / 2, -actor.height], [actor.width / 2, -actor.height], [-actor.width / 2, 0], [actor.width / 2, 0]];
+    const points = corners.map(([x, y]) => ({ x: position.x + actor.width / 2 + x * cos - y * sin, y: position.y + actor.height + x * sin + y * cos }));
+    return { left: Math.min(...points.map(p => p.x)), top: Math.min(...points.map(p => p.y)), right: Math.max(...points.map(p => p.x)), bottom: Math.max(...points.map(p => p.y)) };
+  }
   function platformLane(rect, actor, viewport) {
     const inset = Math.min(24, rect.width * .24);
     const min = viewport.left + 8, max = Math.max(min, viewport.left + viewport.width - actor.width - 8);
@@ -63,21 +90,35 @@
     let hovered = false, keyboardFocused = false, menuAnchor = null, speed = 0, walkDistance = 0, restUntil = 0, direction = 1;
     let size = { width: 90, height: 57 }, pose = { row: 5, column: 0 }, standingUp = false;
     let surfaces = [], active = null, completed = false, jump = null, geometryFrame = 0;
+    let edge = 0, angle = 0, turn = null, laps = 0;
     function measure() {
-      if (!walker.hidden) { const rect = sprite.getBoundingClientRect(); size = { width: rect.width, height: rect.height }; }
+      if (!walker.hidden) { const launcher = doc.getElementById('duck-launcher'); size = { width: launcher.offsetWidth, height: launcher.offsetHeight }; }
     }
     function viewportBounds() { return bounds(innerWidth, innerHeight, size.width, size.height); }
     function corner(side) { const box = viewportBounds(); return { x: side === 'left' ? box.minX : box.maxX, y: box.maxY }; }
     function paint() {
       const anchored = mode === 'roam' && active;
       const view = anchored ? { x: position.x - scrollX, y: position.y - scrollY } : clamp(position, viewportBounds());
+      const box = spriteBounds(view, size, angle);
+      // Keep the whole dog visible on narrow screens, including when he turns sideways.
+      const dx = Math.max(8 - box.left, Math.min(0, innerWidth - 8 - box.right));
+      const dy = Math.max(8 - box.top, Math.min(0, innerHeight - 8 - box.bottom));
+      view.x += dx; view.y += dy;
       walker.style.transform = 'translate3d(' + view.x.toFixed(2) + 'px,' + view.y.toFixed(2) + 'px,0)';
+      walker.style.setProperty('--buddy-angle', angle + 'deg');
       walker.dataset.bubble = view.x < innerWidth / 2 ? 'right' : 'left';
       walker.dataset.controlsSide = view.x + size.width + 155 < innerWidth ? 'right' : view.x > 155 ? 'left' : 'above';
       walker.dataset.surface = active && mode === 'roam' ? String(active.index) : 'corner';
+      walker.dataset.edge = anchored ? ['top', 'right', 'bottom', 'left'][Math.min(edge, 3)] : '';
+      walker.dataset.laps = String(laps);
+      const control = walker.querySelector('.buddy-dock-toggle');
+      const left = box.left + dx, right = box.right + dx, top = box.top + dy, bottom = box.bottom + dy;
+      const cx = right + 151 < innerWidth ? right + 5 : Math.max(8, left - 146);
+      const cy = Math.max(8, Math.min(innerHeight - 36, (top + bottom) / 2 - 13));
+      control.style.left = (cx - view.x) + 'px'; control.style.top = (cy - view.y) + 'px';
       root.dataset.surfaceCount = String(surfaces.length);
     }
-    function lane(surface) { return platformLane(surface, size, { left: scrollX, width: innerWidth }); }
+    function path(surface) { return perimeterPath(surface, size); }
     function renderPose(row, column, activity) {
       pose = { row, column };
       sprite.style.backgroundPosition = (column * 20) + '% ' + (row * 20) + '%';
@@ -91,7 +132,7 @@
       if (reduced.matches || doc.hidden || walker.hidden) return;
       const since = performance.now();
       function animateIdle() {
-        if (walker.classList.contains('is-walking') || jump || doc.hidden || walker.hidden) return;
+        if (walker.classList.contains('is-walking') || jump || turn || doc.hidden || walker.hidden) return;
         const elapsed = performance.now() - since;
         if (elapsed < 2200) renderPose(5, Math.floor(elapsed / 180) % 4);
         else if (elapsed < 2620) renderPose(3, Math.min(2, Math.floor((elapsed - 2200) / 140)));
@@ -107,52 +148,60 @@
       if (jump) {
         if (jump.started !== null) { jump.elapsed = performance.now() - jump.started; jump.started = null; }
         renderPose(2, 2, 'jump');
+      } else if (turn) {
+        if (turn.started !== null) { turn.elapsed = performance.now() - turn.started; turn.started = null; }
+        renderPose(5, 0, 'turn');
       } else idle();
     }
     function allowed() { return mode === 'roam' && !!active && panel.hidden && menu.hidden && !hovered && !keyboardFocused && !reduced.matches && !doc.hidden; }
     function refreshSurfaces(reset) {
       measure();
-      const previous = active, previousLane = previous ? lane(previous) : null;
+      const previous = active, previousPath = previous ? path(previous) : null;
       const items = Array.from(doc.querySelectorAll(platformSelector)).map((node, index) => {
         const r = node.getBoundingClientRect();
         return { node, index, left: r.left + scrollX, right: r.right + scrollX, top: r.top + scrollY, width: r.width, height: r.height };
       }).filter(r => r.width > 32 && r.height > 12 && r.top - scrollY >= size.height + 8 && r.top - scrollY < innerHeight - 10 && r.right > scrollX && r.left < scrollX + innerWidth);
       surfaces = platformOrder(items);
-      if (mode !== 'roam') { active = null; position = corner(mode); paint(); return; }
+      if (mode !== 'roam') { active = null; angle = 0; setDirection(facingForMode(mode, direction)); position = corner(mode); paint(); return; }
       if (jump) {
         const destination = surfaces.find(s => s.node === jump.target.node);
         if (!destination || Math.abs(destination.top - jump.target.top) > 1 || Math.abs(destination.left - jump.target.left) > 1) {
-          stop(); jump = null; goal = null; completed = false; reset = true;
+          stop(); jump = null; turn = null; goal = null; completed = false; reset = true;
         }
       }
       const current = previous && surfaces.find(s => s.node === previous.node);
       if (!reset && current) {
         active = current;
         if (!jump) {
-          const next = lane(active);
-          const fraction = previousLane && previousLane.right > previousLane.left ? (position.x - previousLane.left) / (previousLane.right - previousLane.left) : .5;
-          position = { x: next.left + Math.max(0, Math.min(1, fraction)) * (next.right - next.left), y: next.y };
-          if (goal) goal = { x: direction > 0 ? next.right : next.left, y: next.y };
+          const next = path(active), n = Math.min(edge, 3);
+          const oldLength = Math.hypot(previousPath[n + 1].x - previousPath[n].x, previousPath[n + 1].y - previousPath[n].y);
+          const fraction = completed || turn ? 1 : Math.min(1, Math.hypot(position.x - previousPath[n].x, position.y - previousPath[n].y) / Math.max(1, oldLength));
+          position = { x: next[n].x + (next[n + 1].x - next[n].x) * fraction, y: next[n].y + (next[n + 1].y - next[n].y) * fraction };
+          if (goal) goal = next[n + 1];
         }
       } else {
-        stop(); jump = null; goal = null; completed = false;
+        stop(); jump = turn = null; goal = null; completed = false; edge = 0; angle = 0;
         active = surfaces[0] || null;
-        if (active) { const first = lane(active); position = { x: first.left, y: first.y }; }
-        else position = corner('right');
+        if (active) { position = { ...path(active)[0] }; setDirection(1); }
+        else { position = corner('right'); setDirection(-1); }
         idle();
       }
       paint();
     }
+    function setDirection(next) {
+      const changed = direction !== next;
+      direction = next; walker.style.setProperty('--duck-direction', String(next));
+      if (changed) walkDistance = 0;
+      return changed;
+    }
     function face(target) {
       const next = Math.abs(target - position.x) > 2 ? (target < position.x ? -1 : 1) : direction;
-      if (next === direction) return false;
-      direction = next; walker.style.setProperty('--duck-direction', String(next)); walkDistance = 0;
-      return true;
+      return setDirection(next);
     }
     function beginJump() {
       const currentIndex = surfaces.findIndex(s => s.node === active.node), target = surfaces[(currentIndex + 1) % surfaces.length];
-      const path = lane(target), x = Math.abs(position.x - path.left) <= Math.abs(position.x - path.right) ? path.left : path.right;
-      const to = { x, y: path.y };
+      const to = path(target)[0];
+      angle = 0;
       face(to.x);
       clearTimeout(idleTimer); speed = 0;
       jump = { from: { ...position }, to, target, elapsed: 0, started: performance.now(), duration: Math.max(620, Math.min(1250, Math.hypot(to.x - position.x, to.y - position.y) / 480 * 1000 + 350)) };
@@ -166,20 +215,33 @@
         const progress = (time - jump.started) / jump.duration;
         position = jumpPoint(jump.from, jump.to, progress); paint();
         if (progress >= 1) {
-          active = jump.target; position = jump.to; jump = null; completed = false; goal = null;
+          active = jump.target; position = jump.to; jump = null; completed = false; goal = null; edge = 0; angle = 0; setDirection(1);
           renderPose(3, 1, 'land'); paint();
           timer = setTimeout(() => { idle(); start(); }, 180);
         } else frame = requestAnimationFrame(tick);
         return;
       }
+      if (turn) {
+        const progress = (time - turn.started) / 260;
+        angle = turnAngle(turn.from, turn.to, progress); paint();
+        renderPose(5, 0, 'turn');
+        if (progress < 1) { frame = requestAnimationFrame(tick); return; }
+        turn = null; edge++; goal = null;
+        if (edge === 4) {
+          angle = 0; completed = true; laps++; restUntil = time + 650;
+          idle(); paint(); timer = setTimeout(start, 650);
+        } else start();
+        return;
+      }
       if (!goal) { stop(); return; }
       const delta = lastTime ? (time - lastTime) / 1000 : 0; lastTime = time;
-      const moved = advanceWalk(position, goal.x, speed, delta, size.width * .52);
+      const moved = advancePath(position, goal, speed, delta, size.width * .78);
       speed = moved.speed; walkDistance += moved.moved; position = moved; paint();
       walker.classList.toggle('is-walking', !moved.arrived);
       if (moved.arrived) {
-        goal = null; completed = true; lastTime = 0; restUntil = time + 700;
-        idle(); timer = setTimeout(start, 700);
+        goal = null; lastTime = 0;
+        turn = { from: edge * 90, to: (edge + 1) * 90, elapsed: 0, started: time };
+        frame = requestAnimationFrame(tick);
       } else { renderPose(1, walkFrame(walkDistance, size.width)); frame = requestAnimationFrame(tick); }
     }
     function start() {
@@ -188,14 +250,13 @@
       const now = performance.now();
       if (now < restUntil) { timer = setTimeout(start, restUntil - now); return; }
       if (jump) { jump.started = now - jump.elapsed; frame = requestAnimationFrame(tick); return; }
+      if (turn) { turn.started = now - turn.elapsed; frame = requestAnimationFrame(tick); return; }
       if (!goal && completed && surfaces.length > 1) { beginJump(); return; }
       if (!goal) {
-        const path = lane(active);
-        goal = { x: Math.abs(position.x - path.left) <= Math.abs(position.x - path.right) ? path.right : path.left, y: path.y };
+        if (completed) { edge = 0; angle = 0; }
+        goal = path(active)[edge + 1]; setDirection(1);
         completed = false;
       }
-      if (Math.abs(goal.x - position.x) < 1) { idle(); return; }
-      if (face(goal.x)) { restUntil = now + 180; timer = setTimeout(start, 180); return; }
       clearTimeout(idleTimer);
       if (pose.row === 4 || pose.row === 3) {
         standingUp = true; let column = 2;
@@ -235,7 +296,7 @@
       stop(); placeMenu();
     }));
     choices.forEach(button => button.addEventListener('click', () => {
-      stop(); jump = null; mode = button.dataset.duckMode; goal = null; restUntil = 0; completed = false;
+      stop(); jump = turn = null; mode = button.dataset.duckMode; goal = null; restUntil = 0; completed = false; edge = 0; angle = 0;
       closeMenu(false); syncMode();
       try { localStorage.setItem('retro-duck-position', mode); } catch (_) {}
       root.dispatchEvent(new CustomEvent('duck-position-change', { detail: { mode } }));
@@ -264,5 +325,5 @@
     reduced.addEventListener('change', () => { stop(); start(); });
     measure(); syncMode(); refreshSurfaces(true); idle(); start();
   }
-  return { bounds, clamp, step, walkFrame, advanceWalk, platformLane, platformOrder, jumpPoint, init };
+  return { bounds, clamp, step, walkFrame, advanceWalk, advancePath, perimeterPath, facingForMode, turnAngle, spriteBounds, platformLane, platformOrder, jumpPoint, init };
 }));
