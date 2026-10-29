@@ -74,7 +74,7 @@
 .duck-sprite.is-blinking .tiny-duck-eyes { transform:scaleY(.12); }
 .duck-portrait { display:block; width:52px; height:52px; flex-shrink:0; }
 .duck-portrait .duck-sprite { width:52px; height:52px; transform:none; }
-.duck-launcher-label { padding:5px 10px; background:#39244f; border:1px solid #24172e; border-radius:4px; color:#fff1c2; box-shadow:0 2px 0 #20182b25; font-size:9px; letter-spacing:.5px; }
+.duck-launcher-label { margin-top:2px; padding:5px 10px; background:#39244f; border:1px solid #24172e; border-radius:4px; color:#fff1c2; box-shadow:0 2px 0 #20182b25; font-size:9px; letter-spacing:.5px; }
 .duck-launcher:hover .duck-orbit { transform:none; }
 .duck-walker .duck-invite { opacity:0; transition:opacity .15s; top:16px; right:106px; }
 .duck-walker:hover .duck-invite, .duck-walker:focus-within .duck-invite { opacity:1; }
